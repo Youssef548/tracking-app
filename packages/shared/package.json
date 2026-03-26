@@ -1,0 +1,11 @@
+{
+  "name": "@mindful-flow/shared",
+  "version": "1.0.0",
+  "main": "constants.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
