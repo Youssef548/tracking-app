@@ -1,0 +1,29 @@
+services:
+  client:
+    build: ./packages/client
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+
+  server:
+    build: ./packages/server
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/mindful-flow
+      - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
+      - PORT=5000
+      - NODE_ENV=production
+
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongo-data:
