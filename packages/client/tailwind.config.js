@@ -20,7 +20,7 @@ export default {
         'surface-container':        'rgb(var(--color-surface-container) / <alpha-value>)',
         'surface-container-low':    'rgb(var(--color-surface-container-low) / <alpha-value>)',
         'surface-container-high':   'rgb(var(--color-surface-container-high) / <alpha-value>)',
-        'surface-container-highest':'rgb(var(--color-surface-container-highest) / <alpha-value>)',
+        'surface-container-highest': 'rgb(var(--color-surface-container-highest) / <alpha-value>)',
         'surface-container-lowest': 'rgb(var(--color-surface-container-lowest) / <alpha-value>)',
         'on-surface':               'rgb(var(--color-on-surface) / <alpha-value>)',
         'on-surface-variant':       'rgb(var(--color-on-surface-variant) / <alpha-value>)',
