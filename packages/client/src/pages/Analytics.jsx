@@ -1,8 +1,23 @@
+import { lazy, Suspense } from 'react';
 import { useWeeklyAnalytics } from '../hooks/useAnalytics';
 import { useHabits } from '../hooks/useHabits';
 import { useWeeklyConsistency } from '../hooks/useWeeklyConsistency';
-import { TrendChart, ComparisonBar } from '../components/ChartBlock';
 import AnimatedList, { AnimatedItem } from '../components/AnimatedList';
+
+// Lazy-load Recharts so it's excluded from the initial bundle
+const LazyTrendChart = lazy(() =>
+  import('../components/ChartBlock').then((m) => ({ default: m.TrendChart }))
+);
+const LazyComparisonBar = lazy(() =>
+  import('../components/ChartBlock').then((m) => ({ default: m.ComparisonBar }))
+);
+
+function TrendChart(props) {
+  return <Suspense fallback={<div className="skeleton h-[200px] rounded-2xl" />}><LazyTrendChart {...props} /></Suspense>;
+}
+function ComparisonBar(props) {
+  return <Suspense fallback={<div className="skeleton h-8 rounded-xl" />}><LazyComparisonBar {...props} /></Suspense>;
+}
 
 export default function Analytics() {
   const { data: weekly } = useWeeklyAnalytics();

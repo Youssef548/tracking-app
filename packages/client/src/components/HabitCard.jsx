@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { colorMap, barColors } from '../utils/colorMap';
 
-export default function HabitCard({ habit, completed, progress = 0, onToggle, weeklyHours = null }) {
+const HabitCard = memo(function HabitCard({ habit, completed, progress = 0, onToggle, weeklyHours = null }) {
   const colors = colorMap[habit.color] || colorMap.primary;
   const barColor = barColors[habit.color] || barColors.primary;
   const targetWidth = completed ? 100 : Math.max(progress, 5);
@@ -66,4 +67,6 @@ export default function HabitCard({ habit, completed, progress = 0, onToggle, we
       </div>
     </div>
   );
-}
+});
+
+export default HabitCard;

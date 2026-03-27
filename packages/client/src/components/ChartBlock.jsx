@@ -1,3 +1,4 @@
+// This file is lazy-loaded from Analytics — keep Recharts isolated here
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 function cssVar(name) {
