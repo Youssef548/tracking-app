@@ -10,10 +10,12 @@ import CalendarSkeleton from './components/skeletons/CalendarSkeleton';
 import AnalyticsSkeleton from './components/skeletons/AnalyticsSkeleton';
 import HabitsSkeleton from './components/skeletons/HabitsSkeleton';
 import AuthSkeleton from './components/skeletons/AuthSkeleton';
+import WeeklySkeleton from './components/skeletons/WeeklySkeleton';
 
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Calendar = lazy(() => import('./pages/Calendar'));
 const Analytics = lazy(() => import('./pages/Analytics'));
+const Weekly = lazy(() => import('./pages/Weekly'));
 const Habits = lazy(() => import('./pages/Habits'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
@@ -60,6 +62,11 @@ export default function App() {
         <Route path="/calendar" element={
           <ProtectedRoute><AppLayout>
             <LazyPage skeleton={<CalendarSkeleton />}><Calendar /></LazyPage>
+          </AppLayout></ProtectedRoute>
+        } />
+        <Route path="/weekly" element={
+          <ProtectedRoute><AppLayout>
+            <LazyPage skeleton={<WeeklySkeleton />}><Weekly /></LazyPage>
           </AppLayout></ProtectedRoute>
         } />
         <Route path="/analytics" element={

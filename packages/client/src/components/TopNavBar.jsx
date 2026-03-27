@@ -5,6 +5,7 @@ import NotificationDropdown from './NotificationDropdown';
 const links = [
   { to: '/', label: 'Home' },
   { to: '/calendar', label: 'Calendar' },
+  { to: '/weekly', label: 'Weekly' },
   { to: '/analytics', label: 'Analytics' },
   { to: '/habits', label: 'Habits' },
 ];

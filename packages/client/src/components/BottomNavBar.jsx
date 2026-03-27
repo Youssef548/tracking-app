@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 const tabs = [
   { to: '/', icon: 'home', label: 'Home' },
   { to: '/calendar', icon: 'calendar_month', label: 'Calendar' },
+  { to: '/weekly', icon: 'calendar_view_week', label: 'Weekly' },
   { to: '/habits', icon: 'add_circle', label: 'Add', special: true },
   { to: '/analytics', icon: 'analytics', label: 'Analytics' },
   { to: '/habits', icon: 'checklist', label: 'Habits' },
