@@ -11,6 +11,7 @@ import AnalyticsSkeleton from './components/skeletons/AnalyticsSkeleton';
 import HabitsSkeleton from './components/skeletons/HabitsSkeleton';
 import AuthSkeleton from './components/skeletons/AuthSkeleton';
 import WeeklySkeleton from './components/skeletons/WeeklySkeleton';
+import SettingsSkeleton from './components/skeletons/SettingsSkeleton';
 
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Calendar = lazy(() => import('./pages/Calendar'));
@@ -19,6 +20,7 @@ const Weekly = lazy(() => import('./pages/Weekly'));
 const Habits = lazy(() => import('./pages/Habits'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
+const Settings = lazy(() => import('./pages/Settings'));
 
 function AppLayout({ children }) {
   return (
@@ -77,6 +79,11 @@ export default function App() {
         <Route path="/habits" element={
           <ProtectedRoute><AppLayout>
             <LazyPage skeleton={<HabitsSkeleton />}><Habits /></LazyPage>
+          </AppLayout></ProtectedRoute>
+        } />
+        <Route path="/settings" element={
+          <ProtectedRoute><AppLayout>
+            <LazyPage skeleton={<SettingsSkeleton />}><Settings /></LazyPage>
           </AppLayout></ProtectedRoute>
         } />
         <Route path="*" element={<Navigate to="/" replace />} />
