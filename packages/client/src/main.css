@@ -8,6 +8,23 @@
   vertical-align: middle;
 }
 
+/* ─── Theme transition ───────────────────────────────────── */
+*, *::before, *::after {
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+/* Exclude motion-sensitive elements from the blanket transition */
+button, a, [class*="transition"] {
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease,
+              opacity 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+  }
+}
+
 /* ─── Light theme (default) ──────────────────────────────── */
 :root {
   --color-primary:                    0 91 196;

@@ -62,8 +62,8 @@ export default function Dashboard() {
 
   return (
     <>
-      <section className="mb-10">
-        <h1 className="font-headline text-4xl font-extrabold tracking-tight text-on-surface mb-2">
+      <section className="mb-6 md:mb-10">
+        <h1 className="font-headline text-3xl md:text-4xl font-extrabold tracking-tight text-on-surface mb-2">
           {getGreeting()}, {user?.name?.split(' ')[0]}
         </h1>
         <p className="text-on-surface-variant font-medium">{dayName}, {dateStr}</p>

@@ -25,7 +25,7 @@ export default function Analytics() {
         </div>
       </div>
 
-      <AnimatedList className="grid grid-cols-1 md:grid-cols-12 gap-6">
+      <AnimatedList className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
         <AnimatedItem className="md:col-span-4">
           <div className="bg-surface-container-lowest p-8 rounded-3xl flex flex-col justify-between relative overflow-hidden h-full">
             <div>
