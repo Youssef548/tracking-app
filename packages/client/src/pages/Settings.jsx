@@ -41,6 +41,7 @@ export default function Settings() {
             <button
               key={value}
               onClick={() => setTheme(value)}
+              aria-pressed={theme === value}
               className={`py-3 rounded-2xl border-2 flex flex-col items-center gap-1 transition-colors text-sm font-semibold ${
                 theme === value
                   ? 'border-primary bg-primary/10 text-primary'

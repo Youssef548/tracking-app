@@ -41,16 +41,16 @@ export default function Calendar() {
     <>
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div>
-          <h1 className="text-4xl font-extrabold font-headline tracking-tight text-on-surface mb-2">
+          <h1 className="text-3xl md:text-4xl font-extrabold font-headline tracking-tight text-on-surface mb-2">
             {MONTH_NAMES[month - 1]} {year}
           </h1>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={prevMonth} className="p-2 rounded-xl hover:bg-surface-container-high transition-colors">
-            <span className="material-symbols-outlined">chevron_left</span>
+          <button onClick={prevMonth} aria-label="Previous month" className="w-11 h-11 rounded-xl flex items-center justify-center hover:bg-surface-container-high transition-colors">
+            <span className="material-symbols-outlined" aria-hidden="true">chevron_left</span>
           </button>
-          <button onClick={nextMonth} className="p-2 rounded-xl hover:bg-surface-container-high transition-colors">
-            <span className="material-symbols-outlined">chevron_right</span>
+          <button onClick={nextMonth} aria-label="Next month" className="w-11 h-11 rounded-xl flex items-center justify-center hover:bg-surface-container-high transition-colors">
+            <span className="material-symbols-outlined" aria-hidden="true">chevron_right</span>
           </button>
         </div>
       </div>

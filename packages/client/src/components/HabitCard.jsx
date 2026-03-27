@@ -32,10 +32,10 @@ const HabitCard = memo(function HabitCard({ habit, completed, progress = 0, onTo
         </div>
         <div className="w-full bg-surface-container h-1.5 rounded-full overflow-hidden" aria-hidden="true">
           <motion.div
-            className="h-full rounded-full"
+            className="h-full rounded-full origin-left"
             style={{ backgroundColor: completed ? barColor : 'rgb(var(--color-surface-dim))' }}
-            initial={{ width: '0%' }}
-            animate={{ width: shouldReduce ? `${targetWidth}%` : `${targetWidth}%` }}
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: shouldReduce ? targetWidth / 100 : targetWidth / 100 }}
             transition={shouldReduce ? { duration: 0 } : { duration: 0.5, ease: 'easeOut' }}
           />
         </div>

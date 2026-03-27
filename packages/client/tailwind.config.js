@@ -34,6 +34,8 @@ export default {
         error:                      'rgb(var(--color-error) / <alpha-value>)',
         'error-container':          'rgb(var(--color-error-container) / <alpha-value>)',
         'on-error':                 'rgb(var(--color-on-error) / <alpha-value>)',
+        success:                    'rgb(var(--color-success) / <alpha-value>)',
+        warning:                    'rgb(var(--color-warning) / <alpha-value>)',
         background:                 'rgb(var(--color-background) / <alpha-value>)',
         'on-background':            'rgb(var(--color-on-background) / <alpha-value>)',
       },

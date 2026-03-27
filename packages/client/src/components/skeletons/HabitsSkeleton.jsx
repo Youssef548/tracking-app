@@ -10,7 +10,7 @@ export default function HabitsSkeleton() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-surface-container-lowest p-7 rounded-4xl border border-outline-variant/10">
+          <div key={i} className="bg-surface-container-lowest p-7 rounded-2xl border border-outline-variant/10">
             <div className="flex justify-between items-start mb-6">
               <div className="skeleton w-12 h-12 rounded-2xl" />
             </div>

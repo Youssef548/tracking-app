@@ -11,7 +11,7 @@ export default function CalendarGrid({ year, month, dayData = {}, selectedDate, 
   while (cells.length % 7 !== 0) cells.push(null);
 
   return (
-    <div className="bg-surface-container-lowest rounded-4xl p-4 md:p-8 shadow-sm">
+    <div className="bg-surface-container-lowest rounded-3xl p-4 md:p-8 shadow-sm">
       <div className="grid grid-cols-7 mb-4">
         {DAY_LABELS.map((d) => (
           <div key={d} className="text-center text-xs font-bold uppercase tracking-widest text-outline py-2">{d}</div>
@@ -27,7 +27,12 @@ export default function CalendarGrid({ year, month, dayData = {}, selectedDate, 
 
           return (
             <div key={i} onClick={() => onSelectDate(dateStr)}
-              className={`aspect-square p-2 md:p-3 cursor-pointer transition-all border ${
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelectDate(dateStr); } }}
+              tabIndex={0}
+              role="button"
+              aria-label={`${new Date(dateStr).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}, ${completions.length} completion${completions.length !== 1 ? 's' : ''}`}
+              aria-pressed={isSelected}
+              className={`aspect-square p-2 md:p-3 min-h-[44px] cursor-pointer transition-all border ${
                 isSelected ? 'bg-primary-container/10 border-2 border-primary ring-4 ring-primary/5' :
                 'bg-surface-container-lowest border-surface-container hover:bg-surface-container-low'
               }`}>

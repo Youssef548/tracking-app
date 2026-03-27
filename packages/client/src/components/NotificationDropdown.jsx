@@ -14,9 +14,16 @@ export default function NotificationDropdown() {
     function handleClick(e) {
       if (ref.current && !ref.current.contains(e.target)) setOpen(false);
     }
+    function handleKeyDown(e) {
+      if (e.key === 'Escape' && open) setOpen(false);
+    }
     document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [open]);
 
   return (
     <div className="relative" ref={ref}>
@@ -48,6 +55,10 @@ export default function NotificationDropdown() {
             ) : (
               notifications.slice(0, 10).map((n) => (
                 <div key={n._id} onClick={() => !n.isRead && markRead.mutate(n._id)}
+                  onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && !n.isRead) { e.preventDefault(); markRead.mutate(n._id); } }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`${n.title}: ${n.message}${n.isRead ? '' : ' (unread)'}`}
                   className={`p-4 border-b border-outline-variant/5 cursor-pointer hover:bg-surface-container-low transition-colors ${!n.isRead ? 'bg-primary/5' : ''}`}>
                   <p className="text-sm font-semibold text-on-surface">{n.title}</p>
                   <p className="text-xs text-on-surface-variant mt-1">{n.message}</p>

@@ -29,13 +29,21 @@ function formatWeekRange(startStr) {
 
 const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
+function contrastText(hex) {
+  const c = hex.replace('#', '');
+  const r = parseInt(c.substring(0, 2), 16);
+  const g = parseInt(c.substring(2, 4), 16);
+  const b = parseInt(c.substring(4, 6), 16);
+  return (r * 299 + g * 587 + b * 114) / 1000 > 150 ? '#000' : '#fff';
+}
+
 function DayDisciplineLabel({ score }) {
   if (score === null) return <span className="text-on-surface-variant/40 text-xs">—</span>;
   const pct = Math.round(score * 100);
   let color = 'text-error';
   let label = 'Missed';
-  if (pct === 100) { color = 'text-green-500'; label = 'Perfect'; }
-  else if (pct >= 50) { color = 'text-amber-500'; label = 'Partial'; }
+  if (pct === 100) { color = 'text-success'; label = 'Perfect'; }
+  else if (pct >= 50) { color = 'text-warning'; label = 'Partial'; }
   return (
     <div className="flex flex-col items-center">
       <span className={`text-xs font-bold ${color}`}>{pct}%</span>
@@ -49,8 +57,8 @@ function WeekHistoryCard({ weekStart, label, isActive, onClick }) {
   const score = data ? Math.round(data.overallScore * 100) : null;
   let scoreColor = 'text-primary';
   if (score !== null) {
-    if (score >= 80) scoreColor = 'text-green-500';
-    else if (score >= 50) scoreColor = 'text-amber-500';
+    if (score >= 80) scoreColor = 'text-success';
+    else if (score >= 50) scoreColor = 'text-warning';
     else scoreColor = 'text-error';
   }
 
@@ -72,9 +80,9 @@ function WeekHistoryCard({ weekStart, label, isActive, onClick }) {
             const s = data.dailyScores[day];
             let bg = 'bg-surface-container';
             if (s === null) bg = 'bg-surface-container';
-            else if (s === 1) bg = 'bg-green-500';
-            else if (s >= 0.5) bg = 'bg-amber-500';
-            else if (s > 0) bg = 'bg-amber-500';
+            else if (s === 1) bg = 'bg-success';
+            else if (s >= 0.5) bg = 'bg-warning';
+            else if (s > 0) bg = 'bg-warning';
             else bg = 'bg-error';
             return <div key={day} className={`flex-1 h-1 rounded-full ${bg}`} />;
           })}
@@ -109,26 +117,28 @@ export default function Weekly() {
   return (
     <>
       <section className="mb-6">
-        <h1 className="text-4xl font-extrabold font-headline tracking-tight text-on-surface mb-3">Weekly Tracking</h1>
-        <p className="text-on-surface-variant text-lg">Track your discipline and consistency week by week.</p>
+        <h1 className="text-3xl md:text-4xl font-extrabold font-headline tracking-tight text-on-surface mb-3">Weekly Tracking</h1>
+        <p className="text-on-surface-variant text-lg">Habit-by-habit breakdown of your week.</p>
       </section>
 
       {/* Week navigation + score */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div className="flex items-center gap-3">
           <button onClick={() => setWeekStart((w) => shiftWeek(w, -1))}
-            className="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
-            <span className="material-symbols-outlined text-lg">chevron_left</span>
+            aria-label="Previous week"
+            className="w-11 h-11 rounded-lg bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+            <span className="material-symbols-outlined text-lg" aria-hidden="true">chevron_left</span>
           </button>
           <span className="font-bold text-lg font-headline">{formatWeekRange(weekStart)}</span>
           <button onClick={() => setWeekStart((w) => shiftWeek(w, 1))}
-            className="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
-            <span className="material-symbols-outlined text-lg">chevron_right</span>
+            aria-label="Next week"
+            className="w-11 h-11 rounded-lg bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+            <span className="material-symbols-outlined text-lg" aria-hidden="true">chevron_right</span>
           </button>
         </div>
-        <div className="bg-surface-container-lowest px-5 py-2 rounded-xl border border-outline-variant/10 flex items-center gap-3">
-          <span className="text-sm text-on-surface-variant">Weekly Discipline</span>
-          <span className="text-2xl font-extrabold text-primary">{overallPct}%</span>
+        <div className="flex items-baseline gap-2">
+          <span className="text-3xl font-extrabold font-headline text-on-surface">{overallPct}%</span>
+          <span className="text-sm font-medium text-on-surface-variant">weekly discipline</span>
         </div>
       </div>
 
@@ -136,6 +146,7 @@ export default function Weekly() {
       <div className="flex flex-wrap gap-2 mb-6">
         <button
           onClick={() => setSelectedCategory(null)}
+          aria-pressed={!selectedCategory}
           className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
             !selectedCategory ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'
           }`}
@@ -146,11 +157,12 @@ export default function Weekly() {
           <button
             key={cat._id}
             onClick={() => setSelectedCategory(selectedCategory === cat.name ? null : cat.name)}
+            aria-pressed={selectedCategory === cat.name}
             className="px-4 py-1.5 rounded-full text-sm font-semibold transition-colors border"
             style={{
               borderColor: cat.color,
               backgroundColor: selectedCategory === cat.name ? cat.color : 'transparent',
-              color: selectedCategory === cat.name ? 'white' : cat.color,
+              color: selectedCategory === cat.name ? contrastText(cat.color) : cat.color,
             }}
           >
             {cat.name}
@@ -194,7 +206,7 @@ export default function Weekly() {
                         ) : habit.trackingType === 'duration' ? (
                           <div className="flex flex-col items-center gap-1">
                             <span className={`text-sm font-bold ${
-                              cell.value === 0 ? 'text-error' : cell.value >= (habit.weeklyTarget / 7) ? 'text-green-500' : 'text-amber-500'
+                              cell.value === 0 ? 'text-error' : cell.value >= (habit.weeklyTarget / 7) ? 'text-success' : 'text-warning'
                             }`}>
                               {cell.value > 0 ? `${cell.value}h` : '0'}
                             </span>
@@ -203,13 +215,13 @@ export default function Weekly() {
                                 className="h-full rounded-full"
                                 style={{
                                   width: `${Math.min((cell.value / (habit.weeklyTarget / 5)) * 100, 100)}%`,
-                                  backgroundColor: habit.category?.color || '#005bc4',
+                                  backgroundColor: habit.category?.color || 'rgb(var(--color-primary))',
                                 }}
                               />
                             </div>
                           </div>
                         ) : cell.completed ? (
-                          <span className="text-green-500 text-base font-bold">✓</span>
+                          <span className="text-success text-base font-bold">✓</span>
                         ) : (
                           <span className="text-error text-base font-bold">✗</span>
                         )}
@@ -218,11 +230,11 @@ export default function Weekly() {
                   })}
                   <td className="text-center px-3 py-3">
                     {habit.trackingType === 'duration' ? (
-                      <span className={`text-sm font-bold ${habit.rate >= 1 ? 'text-green-500' : habit.rate >= 0.5 ? 'text-amber-500' : 'text-error'}`}>
+                      <span className={`text-sm font-bold ${habit.rate >= 1 ? 'text-success' : habit.rate >= 0.5 ? 'text-warning' : 'text-error'}`}>
                         {habit.totalHours}/{habit.weeklyTarget}h
                       </span>
                     ) : (
-                      <span className={`text-sm font-bold ${habit.rate >= 0.8 ? 'text-green-500' : habit.rate >= 0.5 ? 'text-amber-500' : 'text-error'}`}>
+                      <span className={`text-sm font-bold ${habit.rate >= 0.8 ? 'text-success' : habit.rate >= 0.5 ? 'text-warning' : 'text-error'}`}>
                         {Math.round(habit.rate * 100)}%
                       </span>
                     )}

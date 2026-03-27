@@ -32,7 +32,7 @@ export default function CalendarSkeleton() {
           </div>
         </div>
         <aside className="w-full lg:w-96 shrink-0">
-          <div className="bg-surface-container-low rounded-4xl p-8">
+          <div className="bg-surface-container-low rounded-3xl p-8">
             <div className="skeleton h-4 w-20 mb-2" />
             <div className="skeleton h-8 w-40 mb-8" />
             <div className="space-y-3">

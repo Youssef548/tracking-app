@@ -13,7 +13,8 @@ export default function DurationInput({ open, onClose, onSubmit, habitName }) {
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[90] flex items-center justify-center p-4"
+          role="dialog" aria-modal="true" aria-labelledby="duration-modal-title">
           <motion.div
             className="absolute inset-0 bg-on-surface/20"
             initial={{ opacity: 0 }}
@@ -21,6 +22,7 @@ export default function DurationInput({ open, onClose, onSubmit, habitName }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             onClick={onClose}
+            aria-hidden="true"
           />
           <motion.div
             className="relative bg-surface-container-lowest rounded-2xl shadow-xl p-6 w-full max-w-xs"
@@ -29,7 +31,7 @@ export default function DurationInput({ open, onClose, onSubmit, habitName }) {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
           >
-            <h3 className="font-headline font-bold text-lg mb-1">Log Time</h3>
+            <h3 id="duration-modal-title" className="font-headline font-bold text-lg mb-1">Log Time</h3>
             <p className="text-sm text-on-surface-variant mb-4">{habitName}</p>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

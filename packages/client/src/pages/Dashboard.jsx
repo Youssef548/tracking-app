@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useHabits } from '../hooks/useHabits';
 import { useCompletionsByDate, useCreateCompletion, useDeleteCompletion } from '../hooks/useCompletions';
@@ -73,9 +74,12 @@ export default function Dashboard() {
         <div className="lg:col-span-8">
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-headline text-xl font-bold">Today's Habits</h2>
-            <span className="text-sm font-semibold text-primary bg-primary/5 px-3 py-1 rounded-full">
-              {completedCount} of {habits.length} completed
-            </span>
+            {habits.length > 0 && (
+              <div className="flex items-center gap-3">
+                <span className="text-2xl font-extrabold font-headline text-on-surface">{completedCount}/{habits.length}</span>
+                <span className="text-xs font-medium text-on-surface-variant">done</span>
+              </div>
+            )}
           </div>
           <AnimatedList className="space-y-6">
             {habits.map((habit) => (
@@ -90,33 +94,51 @@ export default function Dashboard() {
             ))}
           </AnimatedList>
           {habits.length === 0 && (
-            <div className="flex flex-col items-center py-16 text-center">
-              <span className="material-symbols-outlined text-6xl text-on-surface-variant/30 mb-4" aria-hidden="true">self_improvement</span>
-              <h3 className="font-headline text-xl font-bold text-on-surface mb-2">Your day is wide open</h3>
-              <p className="text-on-surface-variant mb-6 max-w-xs">Build one small ritual. Track it here each day. Watch it compound over time.</p>
-              <a href="/habits"
-                className="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-xl font-semibold shadow-sm hover:opacity-90 transition-opacity">
+            <div className="py-12">
+              <h3 className="font-headline text-2xl font-bold text-on-surface mb-8">Get started in 3 steps</h3>
+              <div className="space-y-6 mb-10">
+                <div className="flex gap-4 items-start">
+                  <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary text-on-primary font-bold text-sm flex items-center justify-center">1</span>
+                  <div>
+                    <h4 className="font-semibold text-on-surface">Create a habit</h4>
+                    <p className="text-sm text-on-surface-variant mt-1">Pick something small you want to do daily — reading, exercise, journaling.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 items-start">
+                  <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 text-primary font-bold text-sm flex items-center justify-center">2</span>
+                  <div>
+                    <h4 className="font-semibold text-on-surface">Check in daily</h4>
+                    <p className="text-sm text-on-surface-variant mt-1">Come back each day and mark what you completed. Your streak counter tracks consecutive days.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 items-start">
+                  <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 text-primary font-bold text-sm flex items-center justify-center">3</span>
+                  <div>
+                    <h4 className="font-semibold text-on-surface">Review your week</h4>
+                    <p className="text-sm text-on-surface-variant mt-1">The <span className="font-semibold">Weekly Tracking</span> page shows a habit × day grid with your completion rate. Your <span className="font-semibold">Weekly Score</span> = % of targets hit.</p>
+                  </div>
+                </div>
+              </div>
+              <Link to="/habits"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-xl font-semibold shadow-sm hover:opacity-90 transition-opacity">
                 <span className="material-symbols-outlined text-lg" aria-hidden="true">add_circle</span>
                 Create your first habit
-              </a>
+              </Link>
             </div>
           )}
         </div>
 
         <div className="lg:col-span-4 space-y-8">
-          <div className="bg-surface-container-lowest p-8 rounded-xl shadow-sm relative overflow-hidden">
-            <h2 className="font-headline text-xl font-bold mb-8">Weekly Flow</h2>
+          <div className="bg-surface-container-lowest p-8 rounded-xl shadow-sm">
+            <h2 className="font-headline text-xl font-bold mb-8">Weekly Score</h2>
             <div className="flex flex-col items-center">
               <ProgressRing percent={weekly?.score || 0} />
               <p className="text-center text-on-surface-variant text-sm leading-relaxed px-4 mt-6">
-                You've completed <span className="text-secondary font-bold">{weekly?.completedCount || 0} rituals</span> this week.
+                <span className="text-secondary font-bold">{weekly?.completedCount || 0}</span> of <span className="font-medium">{weekly?.targetCount || 0}</span> completed this week
               </p>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <StatCard icon="bolt" value={weekly?.streak || 0} label="Day Streak" iconColor="text-primary" />
-            <StatCard icon="star" value={weekly?.score || 0} label="Weekly Score" iconColor="text-tertiary" />
-          </div>
+          <StatCard icon="bolt" value={weekly?.streak || 0} label="Day Streak" iconColor="text-primary" />
         </div>
       </div>
 

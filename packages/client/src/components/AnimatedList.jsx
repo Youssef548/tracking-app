@@ -27,7 +27,7 @@ export function AnimatedItem({ children, className = '' }) {
 
   const item = shouldReduce
     ? { hidden: {}, show: {} }
-    : { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } } };
+    : { hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } } };
 
   return (
     <motion.div variants={item} className={className}>

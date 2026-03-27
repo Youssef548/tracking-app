@@ -1,6 +1,7 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 export default function DayDetailPanel({ date, completions = [], habits = [] }) {
+  const shouldReduce = useReducedMotion();
   const d = date ? new Date(date + 'T00:00:00') : null;
   const formatted = d ? d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) : '';
 
@@ -13,15 +14,12 @@ export default function DayDetailPanel({ date, completions = [], habits = [] }) 
       {date && (
         <motion.div
           key={date}
-          className="bg-surface-container-low rounded-4xl p-8 shadow-sm border border-outline-variant/10"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.25, ease: 'easeOut' }}
+          className="bg-surface-container-low rounded-3xl p-8 shadow-sm border border-outline-variant/10"
+          {...(shouldReduce ? {} : { initial: { opacity: 0, x: 20 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: -20 }, transition: { duration: 0.25, ease: 'easeOut' } })}
         >
           <div className="mb-8">
             <span className="uppercase tracking-widest text-on-surface-variant font-bold text-xs">Details for</span>
-            <h2 className="text-3xl font-headline font-extrabold text-on-surface mt-1">{formatted}</h2>
+            <h2 className="text-2xl font-headline font-extrabold text-on-surface mt-1">{formatted}</h2>
           </div>
           <div className="space-y-6">
             {completed.length > 0 && (

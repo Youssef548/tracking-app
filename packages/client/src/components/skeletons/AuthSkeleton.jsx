@@ -1,7 +1,7 @@
 export default function AuthSkeleton() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface px-4">
-      <div className="w-full max-w-md bg-surface-container-lowest p-8 rounded-4xl shadow-lg">
+      <div className="w-full max-w-md bg-surface-container-lowest p-8 rounded-3xl shadow-lg">
         <div className="skeleton h-8 w-48 mb-2" />
         <div className="skeleton h-5 w-56 mb-8" />
         <div className="space-y-5">

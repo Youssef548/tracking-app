@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { HABIT_ICONS, TRACKING_TYPES } from '@mindful-flow/shared/constants';
+import { HABIT_ICONS } from '@mindful-flow/shared/constants';
 import { useCategories } from '../hooks/useCategories';
 
 export default function HabitModal({ open, onClose, onSave, habit = null, isPending = false }) {
@@ -78,7 +78,7 @@ export default function HabitModal({ open, onClose, onSave, habit = null, isPend
 
   const motionProps = shouldReduce
     ? {}
-    : { initial: { opacity: 0, scale: 0.95 }, animate: { opacity: 1, scale: 1 }, exit: { opacity: 0, scale: 0.95 }, transition: { duration: 0.25, ease: 'easeOut' } };
+    : { initial: { opacity: 0, scale: 0.97 }, animate: { opacity: 1, scale: 1 }, exit: { opacity: 0, scale: 0.97 }, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } };
 
   const backdropProps = shouldReduce
     ? {}
@@ -100,7 +100,7 @@ export default function HabitModal({ open, onClose, onSave, habit = null, isPend
             aria-hidden="true"
           />
           <motion.div
-            className="relative w-full max-w-lg w-[calc(100vw-2rem)] bg-surface-container-lowest rounded-4xl shadow-xl overflow-hidden flex flex-col max-h-[90dvh]"
+            className="relative w-full max-w-lg w-[calc(100vw-2rem)] bg-surface-container-lowest rounded-3xl shadow-xl overflow-hidden flex flex-col max-h-[90dvh]"
             {...motionProps}
           >
             <div className="p-8 overflow-y-auto flex-1">
@@ -232,7 +232,6 @@ export default function HabitModal({ open, onClose, onSave, habit = null, isPend
                 </div>
               </form>
             </div>
-            <div className="h-2 bg-gradient-to-r from-primary via-secondary to-tertiary opacity-50" aria-hidden="true" />
           </motion.div>
         </div>
       )}
