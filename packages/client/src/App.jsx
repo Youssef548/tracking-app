@@ -1,13 +1,22 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import ProtectedRoute from './components/ProtectedRoute';
 import TopNavBar from './components/TopNavBar';
 import BottomNavBar from './components/BottomNavBar';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import Calendar from './pages/Calendar';
-import Analytics from './pages/Analytics';
-import Habits from './pages/Habits';
+import PageTransition from './components/PageTransition';
+import DashboardSkeleton from './components/skeletons/DashboardSkeleton';
+import CalendarSkeleton from './components/skeletons/CalendarSkeleton';
+import AnalyticsSkeleton from './components/skeletons/AnalyticsSkeleton';
+import HabitsSkeleton from './components/skeletons/HabitsSkeleton';
+import AuthSkeleton from './components/skeletons/AuthSkeleton';
+
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Calendar = lazy(() => import('./pages/Calendar'));
+const Analytics = lazy(() => import('./pages/Analytics'));
+const Habits = lazy(() => import('./pages/Habits'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
 
 function AppLayout({ children }) {
   return (
@@ -21,16 +30,50 @@ function AppLayout({ children }) {
   );
 }
 
-export default function App() {
+function LazyPage({ skeleton, children }) {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
-      <Route path="/calendar" element={<ProtectedRoute><AppLayout><Calendar /></AppLayout></ProtectedRoute>} />
-      <Route path="/analytics" element={<ProtectedRoute><AppLayout><Analytics /></AppLayout></ProtectedRoute>} />
-      <Route path="/habits" element={<ProtectedRoute><AppLayout><Habits /></AppLayout></ProtectedRoute>} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <Suspense fallback={skeleton}>
+      <PageTransition>
+        {children}
+      </PageTransition>
+    </Suspense>
+  );
+}
+
+export default function App() {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/login" element={
+          <LazyPage skeleton={<AuthSkeleton />}><Login /></LazyPage>
+        } />
+        <Route path="/register" element={
+          <LazyPage skeleton={<AuthSkeleton />}><Register /></LazyPage>
+        } />
+        <Route path="/" element={
+          <ProtectedRoute><AppLayout>
+            <LazyPage skeleton={<DashboardSkeleton />}><Dashboard /></LazyPage>
+          </AppLayout></ProtectedRoute>
+        } />
+        <Route path="/calendar" element={
+          <ProtectedRoute><AppLayout>
+            <LazyPage skeleton={<CalendarSkeleton />}><Calendar /></LazyPage>
+          </AppLayout></ProtectedRoute>
+        } />
+        <Route path="/analytics" element={
+          <ProtectedRoute><AppLayout>
+            <LazyPage skeleton={<AnalyticsSkeleton />}><Analytics /></LazyPage>
+          </AppLayout></ProtectedRoute>
+        } />
+        <Route path="/habits" element={
+          <ProtectedRoute><AppLayout>
+            <LazyPage skeleton={<HabitsSkeleton />}><Habits /></LazyPage>
+          </AppLayout></ProtectedRoute>
+        } />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AnimatePresence>
   );
 }
