@@ -1,4 +1,4 @@
-import { FREQUENCIES, COLORS } from './constants.mjs';
+import { FREQUENCIES, COLORS, TRACKING_TYPES } from './constants.mjs';
 
 export function validateHabitInput(data) {
   const errors = {};
@@ -18,6 +18,28 @@ export function validateHabitInput(data) {
   }
   if (data.color && !COLORS.includes(data.color)) {
     errors.color = 'Invalid color token';
+  }
+  if (data.trackingType && !Object.values(TRACKING_TYPES).includes(data.trackingType)) {
+    errors.trackingType = 'Tracking type must be "checkmark" or "duration"';
+  }
+  if (data.trackingType === TRACKING_TYPES.DURATION) {
+    if (!data.weeklyTarget || data.weeklyTarget < 1 || data.weeklyTarget > 168) {
+      errors.weeklyTarget = 'Weekly target must be between 1 and 168 hours';
+    }
+  }
+  return { isValid: Object.keys(errors).length === 0, errors };
+}
+
+export function validateCategoryInput(data) {
+  const errors = {};
+  if (!data.name || data.name.trim().length === 0) {
+    errors.name = 'Category name is required';
+  }
+  if (data.name && data.name.length > 50) {
+    errors.name = 'Category name must be under 50 characters';
+  }
+  if (!data.color || !/^#[0-9a-fA-F]{6}$/.test(data.color)) {
+    errors.color = 'Valid hex color is required';
   }
   return { isValid: Object.keys(errors).length === 0, errors };
 }
