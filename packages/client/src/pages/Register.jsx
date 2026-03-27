@@ -8,17 +8,21 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    setLoading(true);
     try {
       await register(name, email, password);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Registration failed');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -51,8 +55,8 @@ export default function Register() {
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6}
               className="w-full px-5 py-4 rounded-2xl bg-surface-container border-none focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-on-surface-variant/40 font-medium" placeholder="••••••" />
           </div>
-          <button type="submit" className="w-full py-4 bg-primary text-on-primary font-bold rounded-2xl hover:opacity-90 active:scale-[0.98] transition-all">
-            Create Account
+          <button type="submit" disabled={loading} className="w-full py-4 bg-primary text-on-primary font-bold rounded-2xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+            {loading ? 'Creating account…' : 'Create Account'}
           </button>
         </form>
         <p className="text-center text-on-surface-variant text-sm mt-6">

@@ -16,8 +16,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = import.meta.env.BASE_URL + 'login';
+      const url = error.config?.url || '';
+      if (!url.includes('/auth/')) {
+        localStorage.removeItem('token');
+        window.location.href = import.meta.env.BASE_URL + 'login';
+      }
     }
     return Promise.reject(error);
   }

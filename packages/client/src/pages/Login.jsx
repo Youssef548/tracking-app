@@ -7,17 +7,21 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    setLoading(true);
     try {
       await login(email, password);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.error?.message || 'Login failed');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -45,8 +49,8 @@ export default function Login() {
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required
               className="w-full px-5 py-4 rounded-2xl bg-surface-container border-none focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-on-surface-variant/40 font-medium" placeholder="••••••" />
           </div>
-          <button type="submit" className="w-full py-4 bg-primary text-on-primary font-bold rounded-2xl hover:opacity-90 active:scale-[0.98] transition-all">
-            Sign In
+          <button type="submit" disabled={loading} className="w-full py-4 bg-primary text-on-primary font-bold rounded-2xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+            {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
         <p className="text-center text-on-surface-variant text-sm mt-6">
