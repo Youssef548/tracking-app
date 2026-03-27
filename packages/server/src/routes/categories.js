@@ -8,7 +8,7 @@ const { getCategories, createCategory, updateCategory, deleteCategory } = requir
 router.use(auth);
 router.get('/', getCategories);
 router.post('/', validate(validateCategoryInput), createCategory);
-router.put('/:id', updateCategory);
+router.put('/:id', validate(validateCategoryInput), updateCategory);
 router.delete('/:id', deleteCategory);
 
 module.exports = router;
