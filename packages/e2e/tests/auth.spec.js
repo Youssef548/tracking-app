@@ -29,9 +29,10 @@ test.describe('Auth flows', () => {
     await page.getByRole('button', { name: 'Create Account' }).click();
     await expect(page).toHaveURL('/', { timeout: 10000 });
 
-    // Logout
-    await page.getByTitle('Logout').click();
-    await expect(page).toHaveURL('/login');
+    // Logout via Settings page
+    await page.goto('/settings');
+    await page.getByRole('button', { name: /sign out/i }).click();
+    await expect(page).toHaveURL('/login', { timeout: 5000 });
 
     // Login
     await page.getByPlaceholder('you@example.com').fill(email);

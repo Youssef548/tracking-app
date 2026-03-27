@@ -8,8 +8,8 @@ test.describe('Dashboard', () => {
 
   test('shows greeting and empty state', async ({ page }) => {
     await expect(page.getByText(/good (morning|afternoon|evening)/i)).toBeVisible();
-    await expect(page.getByText('Daily Rituals')).toBeVisible();
-    await expect(page.getByText(/no daily habits yet/i)).toBeVisible();
+    await expect(page.getByText("Today's Habits")).toBeVisible();
+    await expect(page.getByText(/no habits yet/i)).toBeVisible();
   });
 
   test('shows habits after creation and allows toggling', async ({ page }) => {
@@ -17,7 +17,9 @@ test.describe('Dashboard', () => {
     await page.getByRole('link', { name: 'Habits' }).click();
     await page.getByRole('button', { name: 'New Habit' }).click();
     await page.getByPlaceholder('e.g., Morning Yoga').fill('Morning Walk');
-    await page.getByRole('button', { name: 'Save Habit' }).click();
+    const saveBtn = page.getByRole('button', { name: 'Save Habit' });
+    await saveBtn.scrollIntoViewIfNeeded();
+    await saveBtn.click();
     await expect(page.getByText('Morning Walk')).toBeVisible();
 
     // Go back to dashboard
