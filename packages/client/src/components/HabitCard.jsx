@@ -7,9 +7,9 @@ const colorMap = {
 };
 
 const barColors = {
-  primary: '#005bc4',
-  secondary: '#006d4a',
-  tertiary: '#bd0c3b',
+  primary: 'var(--color-primary)',
+  secondary: 'var(--color-secondary)',
+  tertiary: 'var(--color-tertiary)',
 };
 
 export default function HabitCard({ habit, completed, progress = 0, onToggle, weeklyHours = null }) {
@@ -42,7 +42,7 @@ export default function HabitCard({ habit, completed, progress = 0, onToggle, we
         <div className="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
           <motion.div
             className="h-full rounded-full"
-            style={{ backgroundColor: completed ? barColor : '#d4dbdf' }}
+            style={{ backgroundColor: completed ? barColor : 'rgb(var(--color-surface-dim))' }}
             initial={{ width: '0%' }}
             animate={{ width: `${targetWidth}%` }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
