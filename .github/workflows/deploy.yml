@@ -78,6 +78,7 @@ jobs:
           build-args: |
             VITE_API_BASE=/projects/mindful-flow/api
             VITE_BASE_PATH=/projects/mindful-flow/
+            CACHE_BUST=${{ github.sha }}
           cache-from: type=gha,scope=client
           cache-to: type=gha,mode=max,scope=client
 

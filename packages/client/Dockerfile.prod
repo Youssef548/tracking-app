@@ -29,9 +29,9 @@ RUN mkdir -p /app/node_modules/@mindful-flow && \
     rm -rf /app/node_modules/@mindful-flow/shared && \
     ln -s /app/packages/shared /app/node_modules/@mindful-flow/shared
 
-# Build client — invoke vite directly from hoisted node_modules
-# (pnpm's .bin shims break in Docker when lockfile is from Windows)
-RUN cd packages/client && node /app/node_modules/vite/bin/vite.js build
+# Cache-bust: changes when commit SHA changes, forces vite rebuild
+ARG CACHE_BUST
+RUN echo "build: ${CACHE_BUST}" && cd packages/client && node /app/node_modules/vite/bin/vite.js build
 
 # Stage 2: Serve with nginx
 FROM nginx:alpine
