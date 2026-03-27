@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { FREQUENCIES, COLORS } = require('@mindful-flow/shared/constants');
+const { FREQUENCIES, COLORS, TRACKING_TYPES } = require('@mindful-flow/shared/constants');
 
 const habitSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
@@ -9,6 +9,9 @@ const habitSchema = new mongoose.Schema({
   frequency: { type: String, enum: Object.values(FREQUENCIES), required: true },
   target: { type: Number, default: 1, min: 1, max: 7 },
   description: { type: String, default: '', maxlength: 255 },
+  categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
+  trackingType: { type: String, enum: Object.values(TRACKING_TYPES), default: 'checkmark' },
+  weeklyTarget: { type: Number, default: null, min: 1, max: 168 },
   isActive: { type: Boolean, default: true },
 }, { timestamps: true });
 
