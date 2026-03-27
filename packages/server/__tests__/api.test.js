@@ -112,6 +112,87 @@ describe('Auth endpoints', () => {
   });
 });
 
+// ─── Profile update ──────────────────────────────────────────────────
+
+describe('Profile update', () => {
+  let profileToken;
+
+  beforeAll(async () => {
+    const res = await request(app).post('/api/auth/register').send({
+      name: 'Profile User',
+      email: 'profile@example.com',
+      password: 'password123',
+    });
+    profileToken = res.body.token;
+  });
+
+  it('PUT /auth/profile — updates name', async () => {
+    const res = await request(app)
+      .put('/api/auth/profile')
+      .set('Authorization', `Bearer ${profileToken}`)
+      .send({ name: 'Updated Name' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.user.name).toBe('Updated Name');
+  });
+
+  it('PUT /auth/profile — updates email', async () => {
+    const res = await request(app)
+      .put('/api/auth/profile')
+      .set('Authorization', `Bearer ${profileToken}`)
+      .send({ email: 'updated@example.com' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.user.email).toBe('updated@example.com');
+  });
+
+  it('PUT /auth/profile — rejects duplicate email', async () => {
+    // testUser already registered with test@example.com
+    const res = await request(app)
+      .put('/api/auth/profile')
+      .set('Authorization', `Bearer ${profileToken}`)
+      .send({ email: 'test@example.com' });
+
+    expect(res.status).toBe(409);
+    expect(res.body.error.code).toBe('EMAIL_TAKEN');
+  });
+
+  it('PUT /auth/profile — changes password with correct current password', async () => {
+    const res = await request(app)
+      .put('/api/auth/profile')
+      .set('Authorization', `Bearer ${profileToken}`)
+      .send({ currentPassword: 'password123', password: 'newpass456' });
+
+    expect(res.status).toBe(200);
+
+    // Verify new password works for login
+    const loginRes = await request(app).post('/api/auth/login').send({
+      email: 'updated@example.com',
+      password: 'newpass456',
+    });
+    expect(loginRes.status).toBe(200);
+  });
+
+  it('PUT /auth/profile — rejects wrong current password', async () => {
+    const res = await request(app)
+      .put('/api/auth/profile')
+      .set('Authorization', `Bearer ${profileToken}`)
+      .send({ currentPassword: 'wrongpassword', password: 'newpass789' });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe('WRONG_PASSWORD');
+  });
+
+  it('PUT /auth/profile — rejects new password without currentPassword', async () => {
+    const res = await request(app)
+      .put('/api/auth/profile')
+      .set('Authorization', `Bearer ${profileToken}`)
+      .send({ password: 'newpass789' });
+
+    expect(res.status).toBe(400);
+  });
+});
+
 // ─── Habits ──────────────────────────────────────────────────────────
 
 describe('Habits endpoints', () => {
@@ -501,6 +582,67 @@ describe('Notification triggers', () => {
 
     const notifs = res.body.filter((n) => n.title === "You're on your way");
     expect(notifs.length).toBe(1);
+  });
+
+  it('POST /completions — creates first-completion notification', async () => {
+    // triggerToken already has 2 habits from above; get the first habit id
+    const habitsRes = await request(app)
+      .get('/api/habits')
+      .set('Authorization', `Bearer ${triggerToken}`);
+    const firstHabitId = habitsRes.body[0]._id;
+
+    await request(app)
+      .post('/api/completions')
+      .set('Authorization', `Bearer ${triggerToken}`)
+      .send({ habitId: firstHabitId, date: '2026-01-01' });
+
+    const res = await request(app)
+      .get('/api/notifications')
+      .set('Authorization', `Bearer ${triggerToken}`);
+
+    const notif = res.body.find((n) => n.title === 'First check-in');
+    expect(notif).toBeDefined();
+    expect(notif.type).toBe('achievement');
+  });
+
+  it('POST /completions — creates streak notification at 3-day milestone', async () => {
+    // Use a fresh user with exactly 1 daily habit so calculateStreak(completions, 1) fires correctly.
+    // triggerToken's user has 2 daily habits, which would require 2 completions/day for streak.
+    const streakUserRes = await request(app).post('/api/auth/register').send({
+      name: 'Streak User',
+      email: 'streak@example.com',
+      password: 'password123',
+    });
+    const streakToken = streakUserRes.body.token;
+
+    const habitRes = await request(app)
+      .post('/api/habits')
+      .set('Authorization', `Bearer ${streakToken}`)
+      .send({ name: 'Run', frequency: 'daily' });
+    const habitId = habitRes.body._id;
+
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    const dates = [-2, -1, 0].map((offset) => {
+      const d = new Date(today);
+      d.setUTCDate(today.getUTCDate() + offset);
+      return d.toISOString().split('T')[0];
+    });
+
+    for (const date of dates) {
+      await request(app)
+        .post('/api/completions')
+        .set('Authorization', `Bearer ${streakToken}`)
+        .send({ habitId, date });
+    }
+
+    const res = await request(app)
+      .get('/api/notifications')
+      .set('Authorization', `Bearer ${streakToken}`);
+
+    const streakNotif = res.body.find((n) => n.title === '🔥 3-day streak');
+    expect(streakNotif).toBeDefined();
+    expect(streakNotif.type).toBe('streak');
   });
 });
 
