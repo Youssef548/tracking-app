@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useHabits, useCreateHabit, useUpdateHabit, useDeleteHabit } from '../hooks/useHabits';
 import HabitModal from '../components/HabitModal';
 import FAB from '../components/FAB';
+import AnimatedList, { AnimatedItem } from '../components/AnimatedList';
 
 const colorMap = {
   primary: { bg: 'bg-primary/10', text: 'text-primary', progress: 'bg-primary' },
@@ -52,11 +53,12 @@ export default function Habits() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <AnimatedList className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {habits.map((habit) => {
           const colors = colorMap[habit.color] || colorMap.primary;
           return (
-            <div key={habit._id} className="group bg-surface-container-lowest p-7 rounded-4xl border border-outline-variant/10 hover:border-primary/20 transition-all duration-300">
+            <AnimatedItem key={habit._id}>
+            <div className="group bg-surface-container-lowest p-7 rounded-4xl border border-outline-variant/10 hover:border-primary/20 transition-all duration-300">
               <div className="flex justify-between items-start mb-6">
                 <div className={`p-3 rounded-2xl ${colors.bg} ${colors.text}`}>
                   <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>{habit.icon}</span>
@@ -78,9 +80,10 @@ export default function Habits() {
                 {habit.description && <span className="text-sm text-on-surface-variant">{habit.description}</span>}
               </div>
             </div>
+            </AnimatedItem>
           );
         })}
-      </div>
+      </AnimatedList>
 
       {habits.length === 0 && (
         <p className="text-on-surface-variant text-center py-20 text-lg">No habits yet. Create your first one!</p>
