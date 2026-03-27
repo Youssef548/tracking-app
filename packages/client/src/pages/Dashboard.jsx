@@ -30,9 +30,9 @@ export default function Dashboard() {
   const deleteCompletion = useDeleteCompletion();
   const [durationHabit, setDurationHabit] = useState(null);
 
-  const allHabits = habits;
+
   const completedIds = new Set(completions.map((c) => c.habitId?._id || c.habitId));
-  const completedCount = allHabits.filter((h) => completedIds.has(h._id)).length;
+  const completedCount = habits.filter((h) => completedIds.has(h._id)).length;
 
   function handleToggle(habit) {
     if (habit.trackingType === 'duration') {
@@ -74,11 +74,11 @@ export default function Dashboard() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-headline text-xl font-bold">Today's Habits</h2>
             <span className="text-sm font-semibold text-primary bg-primary/5 px-3 py-1 rounded-full">
-              {completedCount} of {allHabits.length} completed
+              {completedCount} of {habits.length} completed
             </span>
           </div>
           <AnimatedList className="space-y-6">
-            {allHabits.map((habit) => (
+            {habits.map((habit) => (
               <AnimatedItem key={habit._id}>
                 <HabitCard
                   habit={habit}
@@ -89,7 +89,7 @@ export default function Dashboard() {
               </AnimatedItem>
             ))}
           </AnimatedList>
-          {allHabits.length === 0 && (
+          {habits.length === 0 && (
             <p className="text-on-surface-variant text-center py-12">No habits yet. Create one to get started!</p>
           )}
         </div>

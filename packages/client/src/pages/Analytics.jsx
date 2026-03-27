@@ -1,11 +1,14 @@
 import { useWeeklyAnalytics } from '../hooks/useAnalytics';
 import { useHabits } from '../hooks/useHabits';
+import { useWeeklyConsistency } from '../hooks/useWeeklyConsistency';
 import { TrendChart, ComparisonBar } from '../components/ChartBlock';
 import AnimatedList, { AnimatedItem } from '../components/AnimatedList';
 
 export default function Analytics() {
   const { data: weekly } = useWeeklyAnalytics();
   const { data: habits = [] } = useHabits();
+  const { data: consistency } = useWeeklyConsistency();
+  const habitRates = new Map((consistency?.habits || []).map(h => [h.habitId, Math.round(h.rate * 100)]));
 
   const barData = [
     { label: 'THIS WEEK', completed: weekly?.completedCount || 0, target: weekly?.targetCount || 0 },
@@ -86,7 +89,7 @@ export default function Analytics() {
                     <h4 className="font-bold text-on-surface mb-1">{habit.name}</h4>
                     <p className="text-xs text-on-surface-variant mb-4">{habit.description || habit.frequency}</p>
                     <div className="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-                      <div className={`${colorClass} h-full rounded-full`} style={{ width: '70%' }} />
+                      <div className={`${colorClass} h-full rounded-full`} style={{ width: `${habitRates.get(habit._id) || 0}%` }} />
                     </div>
                   </div>
                 );
