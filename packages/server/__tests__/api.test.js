@@ -317,9 +317,8 @@ describe('Analytics endpoints', () => {
       .get(`/api/analytics/monthly?month=${now.getMonth() + 1}&year=${now.getFullYear()}`)
       .set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('month');
-    expect(res.body).toHaveProperty('year');
     expect(res.body).toHaveProperty('days');
+    expect(Array.isArray(res.body.days)).toBe(true);
   });
 
   it('GET /analytics/habits/:id — should return habit analytics', async () => {
@@ -338,6 +337,54 @@ describe('Analytics endpoints', () => {
       .get(`/api/analytics/habits/${fakeId}`)
       .set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(404);
+  });
+});
+
+// ─── Analytics — monthly with from/to ─────────────────────────────────
+
+describe('Analytics — monthly with from/to', () => {
+  let monthlyToken;
+  let monthlyUserId;
+  let monthlyHabitId;
+
+  beforeAll(async () => {
+    await clearDB();
+    const auth = await registerAndGetToken();
+    monthlyToken = auth.token;
+    monthlyUserId = auth.userId;
+
+    const habitRes = await request(app)
+      .post('/api/habits')
+      .set('Authorization', `Bearer ${monthlyToken}`)
+      .send({ name: 'Monthly Test Habit', frequency: 'daily' });
+    monthlyHabitId = habitRes.body._id;
+
+    // Create some completions in January
+    await request(app)
+      .post('/api/completions')
+      .set('Authorization', `Bearer ${monthlyToken}`)
+      .send({ habitId: monthlyHabitId, date: '2026-01-05' });
+
+    await request(app)
+      .post('/api/completions')
+      .set('Authorization', `Bearer ${monthlyToken}`)
+      .send({ habitId: monthlyHabitId, date: '2026-01-15' });
+
+    await request(app)
+      .post('/api/completions')
+      .set('Authorization', `Bearer ${monthlyToken}`)
+      .send({ habitId: monthlyHabitId, date: '2026-01-25' });
+  });
+
+  it('GET /analytics/monthly — supports from/to date range params', async () => {
+    const res = await request(app)
+      .get('/api/analytics/monthly')
+      .set('Authorization', `Bearer ${monthlyToken}`)
+      .query({ from: '2026-01-01', to: '2026-01-30' });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('days');
+    expect(Array.isArray(res.body.days)).toBe(true);
   });
 });
 
@@ -409,6 +456,51 @@ describe('Notifications endpoints', () => {
       .set('Authorization', `Bearer ${token}`);
     const unread = check.body.filter((n) => !n.isRead);
     expect(unread.length).toBe(0);
+  });
+});
+
+// ─── Notification triggers ──────────────────────────────────────────
+
+describe('Notification triggers', () => {
+  let triggerToken;
+
+  beforeAll(async () => {
+    const res = await request(app).post('/api/auth/register').send({
+      name: 'Trigger User',
+      email: 'trigger@example.com',
+      password: 'password123',
+    });
+    triggerToken = res.body.token;
+  });
+
+  it('POST /habits — creates first-habit notification on first habit', async () => {
+    await request(app)
+      .post('/api/habits')
+      .set('Authorization', `Bearer ${triggerToken}`)
+      .send({ name: 'Meditate', frequency: 'daily' });
+
+    const res = await request(app)
+      .get('/api/notifications')
+      .set('Authorization', `Bearer ${triggerToken}`);
+
+    expect(res.status).toBe(200);
+    const firstHabitNotif = res.body.find((n) => n.title === "You're on your way");
+    expect(firstHabitNotif).toBeDefined();
+    expect(firstHabitNotif.type).toBe('achievement');
+  });
+
+  it('POST /habits — does not duplicate first-habit notification on second habit', async () => {
+    await request(app)
+      .post('/api/habits')
+      .set('Authorization', `Bearer ${triggerToken}`)
+      .send({ name: 'Read', frequency: 'daily' });
+
+    const res = await request(app)
+      .get('/api/notifications')
+      .set('Authorization', `Bearer ${triggerToken}`);
+
+    const notifs = res.body.filter((n) => n.title === "You're on your way");
+    expect(notifs.length).toBe(1);
   });
 });
 

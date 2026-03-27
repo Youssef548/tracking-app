@@ -51,9 +51,17 @@ async function getWeeklyAnalytics(req, res, next) {
 async function getMonthlyAnalytics(req, res, next) {
   try {
     const userId = req.user._id;
-    const month = parseInt(req.query.month) || new Date().getMonth() + 1;
-    const year = parseInt(req.query.year) || new Date().getFullYear();
-    const { start, end } = getMonthRange(month, year);
+    let start, end;
+
+    if (req.query.from && req.query.to) {
+      start = normalizeDate(req.query.from);
+      end = normalizeDate(req.query.to);
+      end.setUTCDate(end.getUTCDate() + 1); // inclusive end
+    } else {
+      const month = parseInt(req.query.month) || new Date().getMonth() + 1;
+      const year = parseInt(req.query.year) || new Date().getFullYear();
+      ({ start, end } = getMonthRange(month, year));
+    }
 
     const completions = await Completion.find({ userId, date: { $gte: start, $lt: end } }).populate('habitId', 'name icon color');
 
@@ -65,7 +73,7 @@ async function getMonthlyAnalytics(req, res, next) {
     }
 
     const days = Object.entries(daysMap).map(([date, comps]) => ({ date, completions: comps }));
-    res.json({ month, year, days });
+    res.json({ days });
   } catch (err) {
     next(err);
   }
