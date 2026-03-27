@@ -1,15 +1,21 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+function cssVar(name) {
+  return `rgb(var(--color-${name}))`;
+}
+
+const DAY_LABELS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+
 export function TrendChart({ data = [] }) {
   return (
     <ResponsiveContainer width="100%" height={200}>
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#eaeff2" />
-        <XAxis dataKey="date" tick={{ fontSize: 10, fontWeight: 700 }} stroke="#acb3b7"
-          tickFormatter={(v) => ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][new Date(v).getUTCDay()]} />
+        <CartesianGrid strokeDasharray="3 3" stroke={cssVar('surface-dim')} />
+        <XAxis dataKey="date" tick={{ fontSize: 10, fontWeight: 700 }} stroke={cssVar('outline-variant')}
+          tickFormatter={(v) => DAY_LABELS[new Date(v).getUTCDay()]} />
         <YAxis hide />
         <Tooltip />
-        <Line type="monotone" dataKey="count" stroke="#005bc4" strokeWidth={3} dot={false} />
+        <Line type="monotone" dataKey="count" stroke={cssVar('primary')} strokeWidth={3} dot={false} />
       </LineChart>
     </ResponsiveContainer>
   );

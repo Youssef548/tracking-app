@@ -85,14 +85,20 @@
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #eaeff2 25%, #f0f4f7 50%, #eaeff2 75%);
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-surface-container)) 25%,
+    rgb(var(--color-surface-container-low)) 50%,
+    rgb(var(--color-surface-container)) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 8px;
 }
 
-.dark .skeleton {
-  background: linear-gradient(90deg, #1a2428 25%, #222c30 50%, #1a2428 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: rgb(var(--color-surface-container));
+  }
 }

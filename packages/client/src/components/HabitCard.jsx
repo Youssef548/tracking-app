@@ -1,16 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
-
-const colorMap = {
-  primary: { bg: 'bg-primary/10', text: 'text-primary', btnBg: 'bg-primary' },
-  secondary: { bg: 'bg-secondary/10', text: 'text-secondary', btnBg: 'bg-secondary' },
-  tertiary: { bg: 'bg-tertiary/10', text: 'text-tertiary', btnBg: 'bg-tertiary' },
-};
-
-const barColors = {
-  primary: 'var(--color-primary)',
-  secondary: 'var(--color-secondary)',
-  tertiary: 'var(--color-tertiary)',
-};
+import { colorMap, barColors } from '../utils/colorMap';
 
 export default function HabitCard({ habit, completed, progress = 0, onToggle, weeklyHours = null }) {
   const colors = colorMap[habit.color] || colorMap.primary;

@@ -5,12 +5,7 @@ import HabitModal from '../components/HabitModal';
 import CategoryModal from '../components/CategoryModal';
 import FAB from '../components/FAB';
 import AnimatedList, { AnimatedItem } from '../components/AnimatedList';
-
-const colorMap = {
-  primary: { bg: 'bg-primary/10', text: 'text-primary', progress: 'bg-primary' },
-  secondary: { bg: 'bg-secondary/10', text: 'text-secondary', progress: 'bg-secondary' },
-  tertiary: { bg: 'bg-tertiary/10', text: 'text-tertiary', progress: 'bg-tertiary' },
-};
+import { colorMap } from '../utils/colorMap';
 
 export default function Habits() {
   const { data: habits = [] } = useHabits();
