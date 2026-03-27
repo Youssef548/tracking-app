@@ -15,6 +15,7 @@ async function main() {
   process.env.JWT_SECRET = 'e2e-test-secret';
   process.env.PORT = process.env.PORT || '5000';
   process.env.E2E = 'true';
+  process.env.NODE_ENV = 'e2e'; // ensure server calls app.listen() (not blocked by NODE_ENV=test guard)
 
   // 3. Require the server — it will connect to mongo and start listening
   require('../server/src/index');
