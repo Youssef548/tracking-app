@@ -1,5 +1,8 @@
 function normalizeDate(dateInput) {
   const d = new Date(dateInput);
+  if (isNaN(d.getTime())) {
+    throw new Error(`Invalid date: ${dateInput}`);
+  }
   d.setUTCHours(0, 0, 0, 0);
   return d;
 }

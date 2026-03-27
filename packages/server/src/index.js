@@ -1,12 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const helmet = require('helmet');
 require('dotenv').config();
 
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
+app.use(helmet());
 app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true,
