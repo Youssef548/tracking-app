@@ -12,7 +12,7 @@ const barColors = {
   tertiary: '#bd0c3b',
 };
 
-export default function HabitCard({ habit, completed, progress = 0, onToggle }) {
+export default function HabitCard({ habit, completed, progress = 0, onToggle, weeklyHours = null }) {
   const colors = colorMap[habit.color] || colorMap.primary;
   const barColor = barColors[habit.color] || barColors.primary;
   const targetWidth = completed ? 100 : Math.max(progress, 5);
@@ -24,7 +24,20 @@ export default function HabitCard({ habit, completed, progress = 0, onToggle }) 
           <span className={`p-2 rounded-lg ${colors.bg} ${colors.text}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>{habit.icon}</span>
           </span>
-          <h3 className="font-headline font-semibold text-lg">{habit.name}</h3>
+          <div>
+            <h3 className="font-headline font-semibold text-lg">{habit.name}</h3>
+            {habit.categoryId && habit.categoryId.name && (
+              <span
+                className="inline-block text-xs font-semibold px-2 py-0.5 rounded-full mt-1"
+                style={{
+                  backgroundColor: `${habit.categoryId.color}15`,
+                  color: habit.categoryId.color,
+                }}
+              >
+                {habit.categoryId.name}
+              </span>
+            )}
+          </div>
         </div>
         <div className="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
           <motion.div
@@ -37,14 +50,25 @@ export default function HabitCard({ habit, completed, progress = 0, onToggle }) 
         </div>
       </div>
       <div className="ml-8">
-        <button onClick={onToggle}
-          className={`w-12 h-12 rounded-xl flex items-center justify-center active:scale-95 transition-all ${
-            completed
-              ? `${colors.btnBg} text-white`
-              : 'border-2 border-outline-variant/30 text-outline-variant hover:border-primary/50 hover:text-primary'
-          }`}>
-          <span className="material-symbols-outlined">{completed ? 'check_circle' : 'radio_button_unchecked'}</span>
-        </button>
+        {habit.trackingType === 'duration' ? (
+          <button onClick={onToggle}
+            className={`px-3 py-2 rounded-xl font-bold text-sm transition-all ${
+              completed
+                ? `${colors.btnBg} text-white`
+                : 'border-2 border-outline-variant/30 text-outline-variant hover:border-primary/50'
+            }`}>
+            {weeklyHours != null ? `${weeklyHours}/${habit.weeklyTarget}h` : `0/${habit.weeklyTarget}h`}
+          </button>
+        ) : (
+          <button onClick={onToggle}
+            className={`w-12 h-12 rounded-xl flex items-center justify-center active:scale-95 transition-all ${
+              completed
+                ? `${colors.btnBg} text-white`
+                : 'border-2 border-outline-variant/30 text-outline-variant hover:border-primary/50 hover:text-primary'
+            }`}>
+            <span className="material-symbols-outlined">{completed ? 'check_circle' : 'radio_button_unchecked'}</span>
+          </button>
+        )}
       </div>
     </div>
   );
