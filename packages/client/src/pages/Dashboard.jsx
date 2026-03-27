@@ -90,7 +90,16 @@ export default function Dashboard() {
             ))}
           </AnimatedList>
           {habits.length === 0 && (
-            <p className="text-on-surface-variant text-center py-12">No habits yet. Create one to get started!</p>
+            <div className="flex flex-col items-center py-16 text-center">
+              <span className="material-symbols-outlined text-6xl text-on-surface-variant/30 mb-4" aria-hidden="true">self_improvement</span>
+              <h3 className="font-headline text-xl font-bold text-on-surface mb-2">Your day is wide open</h3>
+              <p className="text-on-surface-variant mb-6 max-w-xs">Build one small ritual. Track it here each day. Watch it compound over time.</p>
+              <a href="/habits"
+                className="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-xl font-semibold shadow-sm hover:opacity-90 transition-opacity">
+                <span className="material-symbols-outlined text-lg" aria-hidden="true">add_circle</span>
+                Create your first habit
+              </a>
+            </div>
           )}
         </div>
 
