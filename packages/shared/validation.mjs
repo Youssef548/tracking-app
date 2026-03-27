@@ -71,3 +71,19 @@ export function validateCompletionInput(data) {
   }
   return { isValid: Object.keys(errors).length === 0, errors };
 }
+
+export function validateProfileInput(data) {
+  const errors = {};
+  if (data.name !== undefined) {
+    if (data.name.trim().length === 0) errors.name = 'Name cannot be empty';
+    else if (data.name.length > 100) errors.name = 'Name must be under 100 characters';
+  }
+  if (data.email !== undefined) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) errors.email = 'Valid email is required';
+  }
+  if (data.password !== undefined) {
+    if (!data.currentPassword) errors.currentPassword = 'Current password is required to set a new password';
+    if (data.password.length < 6) errors.password = 'Password must be at least 6 characters';
+  }
+  return { isValid: Object.keys(errors).length === 0, errors };
+}
