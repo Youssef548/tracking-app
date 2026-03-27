@@ -16,7 +16,7 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/+$/, '')}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <AuthProvider>
