@@ -14,9 +14,7 @@ test.describe('Habits management', () => {
     await page.getByRole('button', { name: 'New Habit' }).click();
     await expect(page.getByText('Create Habit')).toBeVisible();
     await page.getByPlaceholder('e.g., Morning Yoga').fill('Read Books');
-    const saveBtn = page.getByRole('button', { name: 'Save Habit' });
-    await saveBtn.scrollIntoViewIfNeeded();
-    await saveBtn.click();
+    await page.getByRole('button', { name: 'Save Habit' }).click();
 
     await expect(page.getByText('Read Books')).toBeVisible();
   });
@@ -25,9 +23,7 @@ test.describe('Habits management', () => {
     // Create one first
     await page.getByRole('button', { name: 'New Habit' }).click();
     await page.getByPlaceholder('e.g., Morning Yoga').fill('Meditate');
-    const saveBtn1 = page.getByRole('button', { name: 'Save Habit' });
-    await saveBtn1.scrollIntoViewIfNeeded();
-    await saveBtn1.click();
+    await page.getByRole('button', { name: 'Save Habit' }).click();
     await expect(page.getByText('Meditate')).toBeVisible();
 
     // Hover the habit card to reveal edit/delete buttons
@@ -47,9 +43,7 @@ test.describe('Habits management', () => {
     // Create one first
     await page.getByRole('button', { name: 'New Habit' }).click();
     await page.getByPlaceholder('e.g., Morning Yoga').fill('Temporary Habit');
-    const saveBtn2 = page.getByRole('button', { name: 'Save Habit' });
-    await saveBtn2.scrollIntoViewIfNeeded();
-    await saveBtn2.click();
+    await page.getByRole('button', { name: 'Save Habit' }).click();
     await expect(page.getByText('Temporary Habit')).toBeVisible();
 
     // Handle confirm dialog before triggering it

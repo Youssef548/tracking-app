@@ -17,9 +17,7 @@ test.describe('Dashboard', () => {
     await page.getByRole('link', { name: 'Habits' }).click();
     await page.getByRole('button', { name: 'New Habit' }).click();
     await page.getByPlaceholder('e.g., Morning Yoga').fill('Morning Walk');
-    const saveBtn = page.getByRole('button', { name: 'Save Habit' });
-    await saveBtn.scrollIntoViewIfNeeded();
-    await saveBtn.click();
+    await page.getByRole('button', { name: 'Save Habit' }).click();
     await expect(page.getByText('Morning Walk')).toBeVisible();
 
     // Go back to dashboard

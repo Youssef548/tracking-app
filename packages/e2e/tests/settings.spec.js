@@ -8,7 +8,7 @@ test.describe('Settings page', () => {
 
   test('shows profile info and all three theme buttons', async ({ page }) => {
     await page.goto('/settings');
-    await expect(page.getByText('Settings')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible();
     await expect(page.getByRole('button', { name: /light/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /dark/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /auto/i })).toBeVisible();

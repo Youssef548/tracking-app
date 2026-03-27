@@ -20,7 +20,7 @@ module.exports = defineConfig({
     {
       command: `node "${path.resolve(__dirname, 'start-server.js')}"`,
       port: 5000,
-      reuseExistingServer: false,
+      reuseExistingServer: !process.env.CI,
       timeout: 30000,
     },
     {

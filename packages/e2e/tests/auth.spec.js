@@ -6,6 +6,8 @@ test.describe('Auth flows', () => {
   test('register a new account', async ({ page }) => {
     const email = unique();
     await page.goto('/register');
+    await page.evaluate(() => localStorage.clear());
+    await page.goto('/register');
 
     await expect(page.getByRole('heading', { name: 'Create account' })).toBeVisible();
     await page.getByPlaceholder('Your name').fill('E2E User');
@@ -22,6 +24,8 @@ test.describe('Auth flows', () => {
     const email = unique();
 
     // Register first
+    await page.goto('/register');
+    await page.evaluate(() => localStorage.clear());
     await page.goto('/register');
     await page.getByPlaceholder('Your name').fill('Login User');
     await page.getByPlaceholder('you@example.com').fill(email);
@@ -44,6 +48,8 @@ test.describe('Auth flows', () => {
   });
 
   test('show error for invalid login', async ({ page }) => {
+    await page.goto('/login');
+    await page.evaluate(() => localStorage.clear());
     await page.goto('/login');
     await page.waitForLoadState('networkidle');
 

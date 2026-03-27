@@ -8,6 +8,9 @@ const unique = () => `user_${Date.now()}@test.com`;
  */
 async function registerAndLogin(page) {
   const email = unique();
+  // Navigate to app origin first so localStorage is accessible, then clear for test isolation
+  await page.goto('/register');
+  await page.evaluate(() => localStorage.clear());
   await page.goto('/register');
   await page.getByPlaceholder('Your name').fill('E2E Tester');
   await page.getByPlaceholder('you@example.com').fill(email);

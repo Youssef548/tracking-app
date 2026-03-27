@@ -31,7 +31,7 @@ async function getWeeklyAnalytics(req, res, next) {
     streakCutoff.setUTCDate(streakCutoff.getUTCDate() - 365);
     streakCutoff.setUTCHours(0, 0, 0, 0);
     const allCompletions = await Completion.find({ userId, date: { $gte: streakCutoff } }).sort({ date: -1 });
-    const streak = calculateStreak(allCompletions, dailyHabits);
+    const streak = calculateStreak(allCompletions, dailyHabits.length);
 
     const dayData = [];
     for (let i = 0; i < 7; i++) {
