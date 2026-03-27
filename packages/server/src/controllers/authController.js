@@ -46,11 +46,34 @@ async function getMe(req, res) {
 
 async function updateProfile(req, res, next) {
   try {
-    const { name, avatar } = req.body;
-    if (name !== undefined) req.user.name = name;
-    if (avatar !== undefined) req.user.avatar = avatar;
-    await req.user.save();
-    res.json({ user: req.user });
+    const { name, email, currentPassword, password } = req.body;
+    const user = req.user;
+
+    if (name !== undefined) {
+      user.name = name.trim();
+    }
+
+    if (email !== undefined && email.toLowerCase() !== user.email) {
+      const taken = await User.findOne({ email: email.toLowerCase(), _id: { $ne: user._id } });
+      if (taken) {
+        return res.status(409).json({ error: { message: 'Email already in use', code: 'EMAIL_TAKEN' } });
+      }
+      user.email = email.toLowerCase();
+    }
+
+    if (password !== undefined) {
+      if (!currentPassword) {
+        return res.status(400).json({ error: { message: 'Current password is required', code: 'MISSING_CURRENT_PASSWORD' } });
+      }
+      const correct = await user.comparePassword(currentPassword);
+      if (!correct) {
+        return res.status(400).json({ error: { message: 'Current password is incorrect', code: 'WRONG_PASSWORD' } });
+      }
+      user.password = password;
+    }
+
+    await user.save();
+    res.json({ user });
   } catch (err) {
     next(err);
   }
