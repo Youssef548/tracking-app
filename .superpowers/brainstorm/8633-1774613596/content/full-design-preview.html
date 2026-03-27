@@ -1,0 +1,431 @@
+<h2>Full Design Preview</h2>
+<p class="subtitle">Here's how the major UI pieces will look across the app</p>
+
+<!-- Section 1: Weekly Consistency Page -->
+<div class="section">
+  <h3>1. Weekly Consistency Page (new page)</h3>
+  <div class="mockup">
+    <div class="mockup-header">Weekly Tracking — /weekly</div>
+    <div class="mockup-body" style="padding:20px; background:#f8fafb;">
+
+      <!-- Top bar: week selector + overall score -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:32px;height:32px;border-radius:10px;background:#e0e4e7;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;">←</div>
+          <span style="font-weight:700; font-size:16px; color:#2c3437;">Mar 23 – Mar 29, 2026</span>
+          <div style="width:32px;height:32px;border-radius:10px;background:#e0e4e7;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;">→</div>
+        </div>
+        <div style="background:white; border-radius:14px; padding:8px 18px; border:1px solid #e0e4e7; display:flex; align-items:center; gap:10px;">
+          <span style="font-size:12px; color:#6b7280;">Weekly Discipline</span>
+          <span style="font-size:22px; font-weight:800; color:#005bc4;">78%</span>
+        </div>
+      </div>
+
+      <!-- Category filter chips -->
+      <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+        <span style="padding:5px 14px; border-radius:20px; background:#005bc4; color:white; font-size:12px; font-weight:600; cursor:pointer;">All</span>
+        <span style="padding:5px 14px; border-radius:20px; background:white; font-size:12px; color:#8b5cf6; border:1.5px solid #8b5cf6; cursor:pointer;">🕌 Religion</span>
+        <span style="padding:5px 14px; border-radius:20px; background:white; font-size:12px; color:#22c55e; border:1.5px solid #22c55e; cursor:pointer;">💪 Health</span>
+        <span style="padding:5px 14px; border-radius:20px; background:white; font-size:12px; color:#f59e0b; border:1.5px solid #f59e0b; cursor:pointer;">📘 Fundamentals</span>
+        <span style="padding:5px 14px; border-radius:20px; background:white; font-size:12px; color:#3b82f6; border:1.5px solid #3b82f6; cursor:pointer;">💻 Technology</span>
+      </div>
+
+      <!-- Consistency Table -->
+      <div style="width:100%; border-radius:14px; overflow:hidden; border:1px solid #e0e4e7; background:white;">
+        <!-- Header row -->
+        <div style="display:grid; grid-template-columns: 160px repeat(7, 1fr) 70px; background:#f0f4f7; padding:10px 0; font-size:11px; color:#6b7280; text-align:center; font-weight:600;">
+          <span style="text-align:left; padding-left:14px;">Habit</span>
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+          <span>Rate</span>
+        </div>
+
+        <!-- Row 1: Prayer (checkmark) — Religion category -->
+        <div style="display:grid; grid-template-columns: 160px repeat(7, 1fr) 70px; padding:12px 0; border-top:1px solid #f0f4f7; align-items:center; text-align:center;">
+          <div style="text-align:left; padding-left:14px; display:flex; flex-direction:column; gap:3px;">
+            <span style="font-size:13px; font-weight:600; color:#2c3437;">🕌 Prayer</span>
+            <span style="font-size:10px; padding:2px 8px; border-radius:10px; background:#f3f0ff; color:#8b5cf6; display:inline-block; width:fit-content;">Religion</span>
+          </div>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#ef4444; font-size:16px;">✗</span>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#9ca3af;">—</span>
+          <span style="font-size:13px; font-weight:700; color:#22c55e;">83%</span>
+        </div>
+
+        <!-- Row 2: Quran Reading (checkmark) — Religion category -->
+        <div style="display:grid; grid-template-columns: 160px repeat(7, 1fr) 70px; padding:12px 0; border-top:1px solid #f0f4f7; align-items:center; text-align:center;">
+          <div style="text-align:left; padding-left:14px; display:flex; flex-direction:column; gap:3px;">
+            <span style="font-size:13px; font-weight:600; color:#2c3437;">📖 Quran</span>
+            <span style="font-size:10px; padding:2px 8px; border-radius:10px; background:#f3f0ff; color:#8b5cf6; display:inline-block; width:fit-content;">Religion</span>
+          </div>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#ef4444; font-size:16px;">✗</span>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#9ca3af;">—</span>
+          <span style="font-size:13px; font-weight:700; color:#22c55e;">83%</span>
+        </div>
+
+        <!-- Row 3: Study (duration) — Fundamentals category -->
+        <div style="display:grid; grid-template-columns: 160px repeat(7, 1fr) 70px; padding:12px 0; border-top:1px solid #f0f4f7; align-items:center; text-align:center;">
+          <div style="text-align:left; padding-left:14px; display:flex; flex-direction:column; gap:3px;">
+            <span style="font-size:13px; font-weight:600; color:#2c3437;">📘 Study</span>
+            <span style="font-size:10px; padding:2px 8px; border-radius:10px; background:#fff7ed; color:#f59e0b; display:inline-block; width:fit-content;">Fundamentals</span>
+          </div>
+          <!-- Vertical bars for duration -->
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#6b7280;">2h</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px; position:relative; overflow:hidden;">
+              <div style="position:absolute; bottom:0; width:100%; height:100%; background:#f59e0b; border-radius:4px;"></div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#6b7280;">1.5h</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px; position:relative; overflow:hidden;">
+              <div style="position:absolute; bottom:0; width:100%; height:75%; background:#f59e0b; border-radius:4px;"></div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#9ca3af;">0</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px;"></div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#6b7280;">2h</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px; position:relative; overflow:hidden;">
+              <div style="position:absolute; bottom:0; width:100%; height:100%; background:#f59e0b; border-radius:4px;"></div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#6b7280;">1h</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px; position:relative; overflow:hidden;">
+              <div style="position:absolute; bottom:0; width:100%; height:50%; background:#f59e0b; border-radius:4px;"></div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#6b7280;">1.5h</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px; position:relative; overflow:hidden;">
+              <div style="position:absolute; bottom:0; width:100%; height:75%; background:#f59e0b; border-radius:4px;"></div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#9ca3af;">—</span>
+            <div style="width:14px; height:32px; background:#f0f4f7; border-radius:4px; border:1px dashed #d1d5db;"></div>
+          </div>
+          <span style="font-size:12px; font-weight:700; color:#22c55e;">8/8h ✓</span>
+        </div>
+
+        <!-- Row 4: Exercise (checkmark) — Health category -->
+        <div style="display:grid; grid-template-columns: 160px repeat(7, 1fr) 70px; padding:12px 0; border-top:1px solid #f0f4f7; align-items:center; text-align:center;">
+          <div style="text-align:left; padding-left:14px; display:flex; flex-direction:column; gap:3px;">
+            <span style="font-size:13px; font-weight:600; color:#2c3437;">💪 Exercise</span>
+            <span style="font-size:10px; padding:2px 8px; border-radius:10px; background:#f0fdf4; color:#22c55e; display:inline-block; width:fit-content;">Health</span>
+          </div>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#ef4444; font-size:16px;">✗</span>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#ef4444; font-size:16px;">✗</span>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#22c55e; font-size:16px;">✓</span>
+          <span style="color:#9ca3af;">—</span>
+          <span style="font-size:13px; font-weight:700; color:#f59e0b;">67%</span>
+        </div>
+
+        <!-- Row 5: Coding (duration) — Technology category -->
+        <div style="display:grid; grid-template-columns: 160px repeat(7, 1fr) 70px; padding:12px 0; border-top:1px solid #f0f4f7; align-items:center; text-align:center;">
+          <div style="text-align:left; padding-left:14px; display:flex; flex-direction:column; gap:3px;">
+            <span style="font-size:13px; font-weight:600; color:#2c3437;">💻 Coding</span>
+            <span style="font-size:10px; padding:2px 8px; border-radius:10px; background:#eff6ff; color:#3b82f6; display:inline-block; width:fit-content;">Technology</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#6b7280;">3h</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px; position:relative; overflow:hidden;">
+              <div style="position:absolute; bottom:0; width:100%; height:100%; background:#3b82f6; border-radius:4px;"></div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#6b7280;">2h</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px; position:relative; overflow:hidden;">
+              <div style="position:absolute; bottom:0; width:100%; height:67%; background:#3b82f6; border-radius:4px;"></div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#6b7280;">1h</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px; position:relative; overflow:hidden;">
+              <div style="position:absolute; bottom:0; width:100%; height:33%; background:#3b82f6; border-radius:4px;"></div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#9ca3af;">0</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px;"></div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#6b7280;">2h</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px; position:relative; overflow:hidden;">
+              <div style="position:absolute; bottom:0; width:100%; height:67%; background:#3b82f6; border-radius:4px;"></div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#6b7280;">2h</span>
+            <div style="width:14px; height:32px; background:#e8ecef; border-radius:4px; position:relative; overflow:hidden;">
+              <div style="position:absolute; bottom:0; width:100%; height:67%; background:#3b82f6; border-radius:4px;"></div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+            <span style="font-size:9px; color:#9ca3af;">—</span>
+            <div style="width:14px; height:32px; background:#f0f4f7; border-radius:4px; border:1px dashed #d1d5db;"></div>
+          </div>
+          <span style="font-size:12px; font-weight:700; color:#f59e0b;">10/14h</span>
+        </div>
+
+        <!-- Daily Summary Row -->
+        <div style="display:grid; grid-template-columns: 160px repeat(7, 1fr) 70px; padding:12px 0; border-top:2.5px solid #e0e4e7; align-items:center; text-align:center; background:#f9fafb;">
+          <span style="text-align:left; padding-left:14px; font-size:12px; font-weight:700; color:#6b7280;">Day Discipline</span>
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <span style="font-size:12px; font-weight:700; color:#22c55e;">100%</span>
+            <span style="font-size:9px; color:#22c55e;">Perfect</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <span style="font-size:12px; font-weight:700; color:#ef4444;">40%</span>
+            <span style="font-size:9px; color:#ef4444;">Missed</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <span style="font-size:12px; font-weight:700; color:#f59e0b;">60%</span>
+            <span style="font-size:9px; color:#f59e0b;">Partial</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <span style="font-size:12px; font-weight:700; color:#f59e0b;">60%</span>
+            <span style="font-size:9px; color:#f59e0b;">Partial</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <span style="font-size:12px; font-weight:700; color:#f59e0b;">60%</span>
+            <span style="font-size:9px; color:#f59e0b;">Partial</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <span style="font-size:12px; font-weight:700; color:#22c55e;">100%</span>
+            <span style="font-size:9px; color:#22c55e;">Perfect</span>
+          </div>
+          <span style="color:#9ca3af; font-size:11px;">Today</span>
+          <span style="font-size:14px; font-weight:800; color:#005bc4;">78%</span>
+        </div>
+      </div>
+
+      <!-- Week History Summary -->
+      <div style="margin-top:20px;">
+        <h4 style="font-size:14px; font-weight:700; color:#2c3437; margin-bottom:12px;">Week History</h4>
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;">
+          <!-- Current week -->
+          <div style="background:white; border-radius:12px; padding:14px; border:2px solid #005bc4;">
+            <div style="font-size:11px; color:#6b7280;">This Week</div>
+            <div style="font-size:11px; color:#6b7280;">Mar 23–29</div>
+            <div style="font-size:24px; font-weight:800; color:#005bc4; margin:6px 0;">78%</div>
+            <div style="display:flex; gap:3px;">
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#ef4444;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#f59e0b;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#f59e0b;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#f59e0b;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#e0e4e7;"></div>
+            </div>
+          </div>
+          <!-- Previous weeks -->
+          <div style="background:white; border-radius:12px; padding:14px; border:1px solid #e0e4e7; cursor:pointer;">
+            <div style="font-size:11px; color:#6b7280;">Last Week</div>
+            <div style="font-size:11px; color:#6b7280;">Mar 16–22</div>
+            <div style="font-size:24px; font-weight:800; color:#22c55e; margin:6px 0;">92%</div>
+            <div style="display:flex; gap:3px;">
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#f59e0b;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+            </div>
+          </div>
+          <div style="background:white; border-radius:12px; padding:14px; border:1px solid #e0e4e7; cursor:pointer;">
+            <div style="font-size:11px; color:#6b7280;">2 Weeks Ago</div>
+            <div style="font-size:11px; color:#6b7280;">Mar 9–15</div>
+            <div style="font-size:24px; font-weight:800; color:#f59e0b; margin:6px 0;">65%</div>
+            <div style="display:flex; gap:3px;">
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#ef4444;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#f59e0b;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#ef4444;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#f59e0b;"></div>
+            </div>
+          </div>
+          <div style="background:white; border-radius:12px; padding:14px; border:1px solid #e0e4e7; cursor:pointer;">
+            <div style="font-size:11px; color:#6b7280;">3 Weeks Ago</div>
+            <div style="font-size:11px; color:#6b7280;">Mar 2–8</div>
+            <div style="font-size:24px; font-weight:800; color:#22c55e; margin:6px 0;">88%</div>
+            <div style="display:flex; gap:3px;">
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#f59e0b;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+              <div style="flex:1; height:4px; border-radius:2px; background:#22c55e;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 2: Habit Card with Category Badge -->
+<div class="section" style="margin-top:32px;">
+  <h3>2. Habit Cards with Category Badges</h3>
+  <div class="split">
+    <div class="mockup">
+      <div class="mockup-header">Checkmark Habit Card</div>
+      <div class="mockup-body" style="padding:20px; background:#f8fafb; display:flex; justify-content:center;">
+        <div style="width:260px; background:white; border-radius:16px; padding:18px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <div>
+              <div style="font-size:15px; font-weight:700; color:#2c3437;">🕌 Prayer</div>
+              <span style="font-size:10px; padding:2px 10px; border-radius:10px; background:#f3f0ff; color:#8b5cf6; margin-top:4px; display:inline-block;">Religion</span>
+            </div>
+            <div style="width:36px; height:36px; border-radius:10px; background:#f0fdf4; display:flex; align-items:center; justify-content:center; font-size:18px; color:#22c55e;">✓</div>
+          </div>
+          <div style="font-size:12px; color:#6b7280; margin-bottom:8px;">Daily · 5 times</div>
+          <div style="height:6px; background:#e8ecef; border-radius:3px; overflow:hidden;">
+            <div style="width:83%; height:100%; background:#22c55e; border-radius:3px;"></div>
+          </div>
+          <div style="font-size:11px; color:#6b7280; margin-top:4px;">5/6 this week</div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="mockup-header">Duration Habit Card</div>
+      <div class="mockup-body" style="padding:20px; background:#f8fafb; display:flex; justify-content:center;">
+        <div style="width:260px; background:white; border-radius:16px; padding:18px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <div>
+              <div style="font-size:15px; font-weight:700; color:#2c3437;">📘 Study</div>
+              <span style="font-size:10px; padding:2px 10px; border-radius:10px; background:#fff7ed; color:#f59e0b; margin-top:4px; display:inline-block;">Fundamentals</span>
+            </div>
+            <div style="width:36px; height:36px; border-radius:10px; background:#eff6ff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#005bc4;">6/8h</div>
+          </div>
+          <div style="font-size:12px; color:#6b7280; margin-bottom:8px;">Weekly · 8 hours target</div>
+          <div style="height:6px; background:#e8ecef; border-radius:3px; overflow:hidden;">
+            <div style="width:75%; height:100%; background:#005bc4; border-radius:3px;"></div>
+          </div>
+          <div style="font-size:11px; color:#6b7280; margin-top:4px;">6 of 8 hours logged</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 3: Category Management -->
+<div class="section" style="margin-top:32px;">
+  <h3>3. Category Management</h3>
+  <div class="mockup">
+    <div class="mockup-header">Habits Page — Categories Section</div>
+    <div class="mockup-body" style="padding:20px; background:#f8fafb;">
+      <!-- Category management bar -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <span style="font-size:14px; font-weight:700; color:#2c3437;">Categories</span>
+        <div style="padding:6px 14px; border-radius:10px; background:#005bc4; color:white; font-size:12px; font-weight:600; cursor:pointer;">+ New Category</div>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <div style="background:white; border-radius:12px; padding:10px 16px; border:1px solid #e0e4e7; display:flex; align-items:center; gap:8px;">
+          <div style="width:12px; height:12px; border-radius:50%; background:#8b5cf6;"></div>
+          <span style="font-size:13px; font-weight:600; color:#2c3437;">Religion</span>
+          <span style="font-size:11px; color:#6b7280;">2 habits</span>
+        </div>
+        <div style="background:white; border-radius:12px; padding:10px 16px; border:1px solid #e0e4e7; display:flex; align-items:center; gap:8px;">
+          <div style="width:12px; height:12px; border-radius:50%; background:#22c55e;"></div>
+          <span style="font-size:13px; font-weight:600; color:#2c3437;">Health</span>
+          <span style="font-size:11px; color:#6b7280;">1 habit</span>
+        </div>
+        <div style="background:white; border-radius:12px; padding:10px 16px; border:1px solid #e0e4e7; display:flex; align-items:center; gap:8px;">
+          <div style="width:12px; height:12px; border-radius:50%; background:#f59e0b;"></div>
+          <span style="font-size:13px; font-weight:600; color:#2c3437;">Fundamentals</span>
+          <span style="font-size:11px; color:#6b7280;">1 habit</span>
+        </div>
+        <div style="background:white; border-radius:12px; padding:10px 16px; border:1px solid #e0e4e7; display:flex; align-items:center; gap:8px;">
+          <div style="width:12px; height:12px; border-radius:50%; background:#3b82f6;"></div>
+          <span style="font-size:13px; font-weight:600; color:#2c3437;">Technology</span>
+          <span style="font-size:11px; color:#6b7280;">1 habit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 4: Create Habit Modal Updates -->
+<div class="section" style="margin-top:32px;">
+  <h3>4. Updated Create Habit Modal</h3>
+  <div class="mockup">
+    <div class="mockup-header">Create Habit — New Fields</div>
+    <div class="mockup-body" style="padding:24px; background:#f8fafb; display:flex; justify-content:center;">
+      <div style="width:380px; background:white; border-radius:20px; padding:24px; box-shadow:0 20px 60px rgba(0,0,0,0.1);">
+        <div style="font-size:16px; font-weight:700; color:#2c3437; margin-bottom:18px;">New Habit</div>
+
+        <!-- Name -->
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px; font-weight:600; color:#6b7280; margin-bottom:4px;">NAME</div>
+          <div style="padding:10px 14px; border-radius:10px; background:#f7f9fb; border:1px solid #e0e4e7; font-size:13px; color:#2c3437;">Study Fundamentals</div>
+        </div>
+
+        <!-- Category dropdown -->
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px; font-weight:600; color:#6b7280; margin-bottom:4px;">CATEGORY</div>
+          <div style="padding:10px 14px; border-radius:10px; background:#f7f9fb; border:1px solid #e0e4e7; font-size:13px; color:#2c3437; display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <div style="width:10px; height:10px; border-radius:50%; background:#f59e0b;"></div>
+              Fundamentals
+            </div>
+            <span style="color:#9ca3af;">▼</span>
+          </div>
+        </div>
+
+        <!-- Tracking type toggle -->
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px; font-weight:600; color:#6b7280; margin-bottom:4px;">TRACKING TYPE</div>
+          <div style="display:flex; border-radius:10px; overflow:hidden; border:1px solid #e0e4e7;">
+            <div style="flex:1; padding:8px; text-align:center; font-size:12px; background:#f7f9fb; color:#6b7280; cursor:pointer;">✓ Checkmark</div>
+            <div style="flex:1; padding:8px; text-align:center; font-size:12px; background:#005bc4; color:white; font-weight:600;">⏱ Duration</div>
+          </div>
+        </div>
+
+        <!-- Weekly target (shown for duration) -->
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px; font-weight:600; color:#6b7280; margin-bottom:4px;">WEEKLY TARGET (HOURS)</div>
+          <div style="padding:10px 14px; border-radius:10px; background:#f7f9fb; border:1px solid #e0e4e7; font-size:13px; color:#2c3437;">8</div>
+        </div>
+
+        <!-- Existing fields -->
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px; font-weight:600; color:#6b7280; margin-bottom:4px;">ICON & COLOR</div>
+          <div style="display:flex; gap:8px;">
+            <div style="padding:8px 14px; border-radius:10px; background:#f7f9fb; border:1px solid #e0e4e7; font-size:13px;">📘</div>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <div style="width:24px; height:24px; border-radius:8px; background:#005bc4; border:2px solid #005bc4;"></div>
+              <div style="width:24px; height:24px; border-radius:8px; background:#8b5cf6;"></div>
+              <div style="width:24px; height:24px; border-radius:8px; background:#22c55e;"></div>
+              <div style="width:24px; height:24px; border-radius:8px; background:#f59e0b;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save -->
+        <div style="display:flex; gap:10px; margin-top:18px;">
+          <div style="flex:1; padding:10px; text-align:center; border-radius:12px; background:#f0f4f7; color:#6b7280; font-size:13px; font-weight:600; cursor:pointer;">Cancel</div>
+          <div style="flex:1; padding:10px; text-align:center; border-radius:12px; background:#005bc4; color:white; font-size:13px; font-weight:600; cursor:pointer;">Create Habit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

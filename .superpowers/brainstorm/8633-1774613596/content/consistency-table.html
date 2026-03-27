@@ -1,0 +1,208 @@
+<h2>Weekly Consistency Table Layout</h2>
+<p class="subtitle">This is the main tracking view where you see which days you were disciplined. Which layout feels right?</p>
+
+<div class="cards">
+  <!-- Option A: Row per habit -->
+  <div class="card" data-choice="row-per-habit" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 20px; background: #f7f9fb; min-height: 260px;">
+      <!-- Week header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <span style="font-weight:700; color:#2c3437;">Week of Mar 23 – Mar 29</span>
+        <div style="display:flex; gap:8px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#e0e4e7;display:flex;align-items:center;justify-content:center;font-size:12px;">←</div>
+          <div style="width:28px;height:28px;border-radius:8px;background:#e0e4e7;display:flex;align-items:center;justify-content:center;font-size:12px;">→</div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div style="width:100%; border-radius:12px; overflow:hidden; border:1px solid #e0e4e7;">
+        <!-- Header row -->
+        <div style="display:grid; grid-template-columns: 140px repeat(7, 1fr) 60px; background:#f0f4f7; padding:8px 0; font-size:11px; color:#6b7280; text-align:center;">
+          <span style="text-align:left; padding-left:12px;">Habit</span>
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+          <span>Rate</span>
+        </div>
+        <!-- Row 1: Study -->
+        <div style="display:grid; grid-template-columns: 140px repeat(7, 1fr) 60px; padding:10px 0; border-top:1px solid #f0f4f7; align-items:center; text-align:center;">
+          <span style="text-align:left; padding-left:12px; font-size:13px; display:flex; align-items:center; gap:6px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:#005bc4;"></span>
+            Study (2h)
+          </span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#ef4444;">✗</span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#9ca3af;">—</span>
+          <span style="font-size:12px; font-weight:600; color:#22c55e;">83%</span>
+        </div>
+        <!-- Row 2: Prayer -->
+        <div style="display:grid; grid-template-columns: 140px repeat(7, 1fr) 60px; padding:10px 0; border-top:1px solid #f0f4f7; align-items:center; text-align:center;">
+          <span style="text-align:left; padding-left:12px; font-size:13px; display:flex; align-items:center; gap:6px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:#8b5cf6;"></span>
+            Prayer
+          </span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#ef4444;">✗</span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#9ca3af;">—</span>
+          <span style="font-size:12px; font-weight:600; color:#22c55e;">83%</span>
+        </div>
+        <!-- Row 3: Exercise -->
+        <div style="display:grid; grid-template-columns: 140px repeat(7, 1fr) 60px; padding:10px 0; border-top:1px solid #f0f4f7; align-items:center; text-align:center;">
+          <span style="text-align:left; padding-left:12px; font-size:13px; display:flex; align-items:center; gap:6px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;"></span>
+            Exercise
+          </span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#ef4444;">✗</span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#ef4444;">✗</span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#22c55e;">✓</span>
+          <span style="color:#9ca3af;">—</span>
+          <span style="font-size:12px; font-weight:600; color:#f59e0b;">67%</span>
+        </div>
+        <!-- Daily Summary Row -->
+        <div style="display:grid; grid-template-columns: 140px repeat(7, 1fr) 60px; padding:10px 0; border-top:2px solid #e0e4e7; align-items:center; text-align:center; background:#f9fafb;">
+          <span style="text-align:left; padding-left:12px; font-size:12px; font-weight:600; color:#6b7280;">Day Score</span>
+          <span style="font-size:11px; font-weight:600; color:#22c55e;">100%</span>
+          <span style="font-size:11px; font-weight:600; color:#f59e0b;">67%</span>
+          <span style="font-size:11px; font-weight:600; color:#f59e0b;">67%</span>
+          <span style="font-size:11px; font-weight:600; color:#f59e0b;">67%</span>
+          <span style="font-size:11px; font-weight:600; color:#f59e0b;">67%</span>
+          <span style="font-size:11px; font-weight:600; color:#22c55e;">100%</span>
+          <span style="font-size:11px; color:#9ca3af;">—</span>
+          <span style="font-size:12px; font-weight:700; color:#005bc4;">78%</span>
+        </div>
+      </div>
+
+      <!-- Category filter -->
+      <div style="display:flex; gap:6px; margin-top:12px;">
+        <span style="padding:4px 10px; border-radius:20px; background:#005bc4; color:white; font-size:11px;">All</span>
+        <span style="padding:4px 10px; border-radius:20px; background:#e0e4e7; font-size:11px; color:#6b7280;">Religion</span>
+        <span style="padding:4px 10px; border-radius:20px; background:#e0e4e7; font-size:11px; color:#6b7280;">Health</span>
+        <span style="padding:4px 10px; border-radius:20px; background:#e0e4e7; font-size:11px; color:#6b7280;">Fundamentals</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Habit Rows Table</h3>
+      <p>Each habit is a row, days are columns. Bottom row shows daily discipline score. Category filter chips at top. Clear at-a-glance view of the whole week.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Day-focused cards -->
+  <div class="card" data-choice="day-cards" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 20px; background: #f7f9fb; min-height: 260px;">
+      <!-- Week header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <span style="font-weight:700; color:#2c3437;">Week of Mar 23 – Mar 29</span>
+        <div style="display:flex; gap:8px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#e0e4e7;display:flex;align-items:center;justify-content:center;font-size:12px;">←</div>
+          <div style="width:28px;height:28px;border-radius:8px;background:#e0e4e7;display:flex;align-items:center;justify-content:center;font-size:12px;">→</div>
+        </div>
+      </div>
+
+      <!-- Day cards row -->
+      <div style="display:grid; grid-template-columns: repeat(7, 1fr); gap:8px;">
+        <!-- Monday -->
+        <div style="background:white; border-radius:12px; padding:10px; border:2px solid #22c55e; text-align:center;">
+          <div style="font-size:11px; color:#6b7280;">Mon</div>
+          <div style="font-size:16px; font-weight:700; color:#22c55e; margin:4px 0;">3/3</div>
+          <div style="font-size:10px; color:#22c55e;">100%</div>
+          <div style="margin-top:6px; display:flex; flex-direction:column; gap:3px;">
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+          </div>
+        </div>
+        <!-- Tuesday -->
+        <div style="background:white; border-radius:12px; padding:10px; border:2px solid #f59e0b; text-align:center;">
+          <div style="font-size:11px; color:#6b7280;">Tue</div>
+          <div style="font-size:16px; font-weight:700; color:#f59e0b; margin:4px 0;">2/3</div>
+          <div style="font-size:10px; color:#f59e0b;">67%</div>
+          <div style="margin-top:6px; display:flex; flex-direction:column; gap:3px;">
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+            <div style="height:4px; border-radius:2px; background:#ef4444;"></div>
+          </div>
+        </div>
+        <!-- Wed -->
+        <div style="background:white; border-radius:12px; padding:10px; border:2px solid #f59e0b; text-align:center;">
+          <div style="font-size:11px; color:#6b7280;">Wed</div>
+          <div style="font-size:16px; font-weight:700; color:#f59e0b; margin:4px 0;">2/3</div>
+          <div style="font-size:10px; color:#f59e0b;">67%</div>
+          <div style="margin-top:6px; display:flex; flex-direction:column; gap:3px;">
+            <div style="height:4px; border-radius:2px; background:#ef4444;"></div>
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+          </div>
+        </div>
+        <!-- Thu -->
+        <div style="background:white; border-radius:12px; padding:10px; border:2px solid #f59e0b; text-align:center;">
+          <div style="font-size:11px; color:#6b7280;">Thu</div>
+          <div style="font-size:16px; font-weight:700; color:#f59e0b; margin:4px 0;">2/3</div>
+          <div style="font-size:10px; color:#f59e0b;">67%</div>
+          <div style="margin-top:6px; display:flex; flex-direction:column; gap:3px;">
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+            <div style="height:4px; border-radius:2px; background:#ef4444;"></div>
+          </div>
+        </div>
+        <!-- Fri -->
+        <div style="background:white; border-radius:12px; padding:10px; border:2px solid #f59e0b; text-align:center;">
+          <div style="font-size:11px; color:#6b7280;">Fri</div>
+          <div style="font-size:16px; font-weight:700; color:#f59e0b; margin:4px 0;">2/3</div>
+          <div style="font-size:10px; color:#f59e0b;">67%</div>
+          <div style="margin-top:6px; display:flex; flex-direction:column; gap:3px;">
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+            <div style="height:4px; border-radius:2px; background:#ef4444;"></div>
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+          </div>
+        </div>
+        <!-- Sat -->
+        <div style="background:white; border-radius:12px; padding:10px; border:2px solid #22c55e; text-align:center;">
+          <div style="font-size:11px; color:#6b7280;">Sat</div>
+          <div style="font-size:16px; font-weight:700; color:#22c55e; margin:4px 0;">3/3</div>
+          <div style="font-size:10px; color:#22c55e;">100%</div>
+          <div style="margin-top:6px; display:flex; flex-direction:column; gap:3px;">
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+            <div style="height:4px; border-radius:2px; background:#22c55e;"></div>
+          </div>
+        </div>
+        <!-- Sun -->
+        <div style="background:white; border-radius:12px; padding:10px; border:1px dashed #d1d5db; text-align:center; opacity:0.5;">
+          <div style="font-size:11px; color:#6b7280;">Sun</div>
+          <div style="font-size:16px; font-weight:700; color:#9ca3af; margin:4px 0;">—</div>
+          <div style="font-size:10px; color:#9ca3af;">Today</div>
+          <div style="margin-top:6px; display:flex; flex-direction:column; gap:3px;">
+            <div style="height:4px; border-radius:2px; background:#e0e4e7;"></div>
+            <div style="height:4px; border-radius:2px; background:#e0e4e7;"></div>
+            <div style="height:4px; border-radius:2px; background:#e0e4e7;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly summary bar -->
+      <div style="margin-top:14px; background:white; border-radius:12px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border:1px solid #e0e4e7;">
+        <div>
+          <span style="font-size:12px; color:#6b7280;">Weekly Score</span>
+          <span style="font-size:18px; font-weight:700; color:#005bc4; margin-left:8px;">78%</span>
+        </div>
+        <div style="display:flex; gap:12px;">
+          <span style="font-size:11px; color:#22c55e;">2 perfect days</span>
+          <span style="font-size:11px; color:#ef4444;">0 missed days</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Day Cards</h3>
+      <p>Each day is a card showing completion score and habit bars. Focus is on daily discipline — green border = perfect day. Good for quick visual scanning but less detail per habit.</p>
+    </div>
+  </div>
+</div>

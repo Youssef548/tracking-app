@@ -4,9 +4,15 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon src/index.js",
+    "dev:mem": "node start-dev.js",
     "build": "echo 'No build step for server'",
     "start": "node src/index.js",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand --forceExit"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": ["./__tests__/setup.js"],
+    "testMatch": ["**/__tests__/**/*.test.js"]
   },
   "dependencies": {
     "@mindful-flow/shared": "workspace:*",

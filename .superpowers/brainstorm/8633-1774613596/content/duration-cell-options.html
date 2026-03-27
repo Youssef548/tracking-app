@@ -1,0 +1,145 @@
+<h2>Duration Cell Alternatives</h2>
+<p class="subtitle">The vertical bars didn't feel right. Here are other ways to show hours logged per day in the table.</p>
+
+<div class="cards">
+  <!-- Option A: Horizontal mini bar -->
+  <div class="card" data-choice="horizontal-bar" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: #f7f9fb; min-height: 180px;">
+      <div style="font-size:12px; color:#6b7280; margin-bottom:14px;">Example row: "Study 8h/week" (max ~2h/day)</div>
+      <div style="display:grid; grid-template-columns: 140px repeat(7, 1fr) 70px; gap:4px; align-items:center; text-align:center;">
+        <div style="text-align:left; padding-left:4px; display:flex; flex-direction:column; gap:2px;">
+          <span style="font-size:13px; font-weight:600;">📘 Study</span>
+          <span style="font-size:9px; padding:1px 6px; border-radius:8px; background:#fff7ed; color:#f59e0b; width:fit-content;">Fundamentals</span>
+        </div>
+        <!-- Mon: 2h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#2c3437; font-weight:600;">2h</span>
+          <div style="width:85%; height:5px; background:#e0e4e7; border-radius:3px; overflow:hidden;">
+            <div style="width:100%; height:100%; background:#f59e0b; border-radius:3px;"></div>
+          </div>
+        </div>
+        <!-- Tue: 1.5h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#2c3437; font-weight:600;">1.5h</span>
+          <div style="width:85%; height:5px; background:#e0e4e7; border-radius:3px; overflow:hidden;">
+            <div style="width:75%; height:100%; background:#f59e0b; border-radius:3px;"></div>
+          </div>
+        </div>
+        <!-- Wed: 0h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#9ca3af;">0</span>
+          <div style="width:85%; height:5px; background:#e0e4e7; border-radius:3px;"></div>
+        </div>
+        <!-- Thu: 2h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#2c3437; font-weight:600;">2h</span>
+          <div style="width:85%; height:5px; background:#e0e4e7; border-radius:3px; overflow:hidden;">
+            <div style="width:100%; height:100%; background:#f59e0b; border-radius:3px;"></div>
+          </div>
+        </div>
+        <!-- Fri: 1h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#2c3437; font-weight:600;">1h</span>
+          <div style="width:85%; height:5px; background:#e0e4e7; border-radius:3px; overflow:hidden;">
+            <div style="width:50%; height:100%; background:#f59e0b; border-radius:3px;"></div>
+          </div>
+        </div>
+        <!-- Sat: 1.5h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#2c3437; font-weight:600;">1.5h</span>
+          <div style="width:85%; height:5px; background:#e0e4e7; border-radius:3px; overflow:hidden;">
+            <div style="width:75%; height:100%; background:#f59e0b; border-radius:3px;"></div>
+          </div>
+        </div>
+        <!-- Sun -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#9ca3af;">—</span>
+          <div style="width:85%; height:5px; background:#f0f4f7; border-radius:3px; border:1px dashed #d1d5db;"></div>
+        </div>
+        <span style="font-size:12px; font-weight:700; color:#22c55e;">8/8h ✓</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Horizontal Mini Bars</h3>
+      <p>Flat horizontal bar under the hours label. Compact, same row height as checkmark habits. Clean and uniform.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Colored circle with hours -->
+  <div class="card" data-choice="colored-circles" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: #f7f9fb; min-height: 180px;">
+      <div style="font-size:12px; color:#6b7280; margin-bottom:14px;">Example row: "Study 8h/week" (max ~2h/day)</div>
+      <div style="display:grid; grid-template-columns: 140px repeat(7, 1fr) 70px; gap:4px; align-items:center; text-align:center;">
+        <div style="text-align:left; padding-left:4px; display:flex; flex-direction:column; gap:2px;">
+          <span style="font-size:13px; font-weight:600;">📘 Study</span>
+          <span style="font-size:9px; padding:1px 6px; border-radius:8px; background:#fff7ed; color:#f59e0b; width:fit-content;">Fundamentals</span>
+        </div>
+        <!-- Mon: 2h (full) -->
+        <div style="display:flex; justify-content:center;">
+          <div style="width:30px; height:30px; border-radius:50%; background:#f59e0b; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:white;">2h</div>
+        </div>
+        <!-- Tue: 1.5h -->
+        <div style="display:flex; justify-content:center;">
+          <div style="width:30px; height:30px; border-radius:50%; background:rgba(245,158,11,0.7); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:white;">1.5</div>
+        </div>
+        <!-- Wed: 0h -->
+        <div style="display:flex; justify-content:center;">
+          <div style="width:30px; height:30px; border-radius:50%; background:#f0f4f7; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; color:#9ca3af;">0</div>
+        </div>
+        <!-- Thu: 2h -->
+        <div style="display:flex; justify-content:center;">
+          <div style="width:30px; height:30px; border-radius:50%; background:#f59e0b; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:white;">2h</div>
+        </div>
+        <!-- Fri: 1h -->
+        <div style="display:flex; justify-content:center;">
+          <div style="width:30px; height:30px; border-radius:50%; background:rgba(245,158,11,0.5); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:white;">1h</div>
+        </div>
+        <!-- Sat: 1.5h -->
+        <div style="display:flex; justify-content:center;">
+          <div style="width:30px; height:30px; border-radius:50%; background:rgba(245,158,11,0.7); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:white;">1.5</div>
+        </div>
+        <!-- Sun -->
+        <div style="display:flex; justify-content:center;">
+          <div style="width:30px; height:30px; border-radius:50%; border:1.5px dashed #d1d5db; display:flex; align-items:center; justify-content:center; font-size:10px; color:#9ca3af;">—</div>
+        </div>
+        <span style="font-size:12px; font-weight:700; color:#22c55e;">8/8h ✓</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Colored Circles</h3>
+      <p>Hours inside a colored circle. Opacity changes with amount (more hours = more opaque). Easy to scan — big colored dot = productive day, faint dot = light day.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Just numbers with color coding -->
+  <div class="card" data-choice="color-numbers" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: #f7f9fb; min-height: 180px;">
+      <div style="font-size:12px; color:#6b7280; margin-bottom:14px;">Example row: "Study 8h/week" (max ~2h/day)</div>
+      <div style="display:grid; grid-template-columns: 140px repeat(7, 1fr) 70px; gap:4px; align-items:center; text-align:center;">
+        <div style="text-align:left; padding-left:4px; display:flex; flex-direction:column; gap:2px;">
+          <span style="font-size:13px; font-weight:600;">📘 Study</span>
+          <span style="font-size:9px; padding:1px 6px; border-radius:8px; background:#fff7ed; color:#f59e0b; width:fit-content;">Fundamentals</span>
+        </div>
+        <!-- Mon: 2h -->
+        <span style="font-size:14px; font-weight:700; color:#22c55e;">2h</span>
+        <!-- Tue: 1.5h -->
+        <span style="font-size:14px; font-weight:700; color:#22c55e;">1.5h</span>
+        <!-- Wed: 0h -->
+        <span style="font-size:14px; font-weight:700; color:#ef4444;">0</span>
+        <!-- Thu: 2h -->
+        <span style="font-size:14px; font-weight:700; color:#22c55e;">2h</span>
+        <!-- Fri: 1h -->
+        <span style="font-size:14px; font-weight:700; color:#f59e0b;">1h</span>
+        <!-- Sat: 1.5h -->
+        <span style="font-size:14px; font-weight:700; color:#22c55e;">1.5h</span>
+        <!-- Sun -->
+        <span style="font-size:14px; color:#9ca3af;">—</span>
+        <span style="font-size:12px; font-weight:700; color:#22c55e;">8/8h ✓</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Color-Coded Numbers</h3>
+      <p>Just the hours text, color-coded: green = good amount, amber = low, red = zero. Minimalist, matches the ✓/✗ simplicity of checkmark rows. No extra visual elements.</p>
+    </div>
+  </div>
+</div>

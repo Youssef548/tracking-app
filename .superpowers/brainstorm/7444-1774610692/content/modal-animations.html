@@ -1,0 +1,90 @@
+<h2>How should modals appear and disappear?</h2>
+<p class="subtitle">Your HabitModal currently pops in/out instantly. Pick the entrance/exit animation style.</p>
+
+<div class="cards">
+  <!-- Option A: Fade + Scale -->
+  <div class="card" data-choice="fade-scale" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: #f7f9fb; display: flex; align-items: center; justify-content: center; min-height: 220px; position: relative; overflow: hidden;">
+      <!-- Backdrop -->
+      <div style="position: absolute; inset: 0; background: rgba(44,52,55,0.3); animation: fadeIn 0.8s ease infinite alternate;"></div>
+      <!-- Modal -->
+      <div style="position: relative; width: 80%; max-width: 280px; background: white; border-radius: 24px; padding: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.12); animation: scaleIn 0.8s ease infinite alternate;">
+        <div style="height: 12px; width: 50%; background: #2c3437; border-radius: 6px; margin-bottom: 12px;"></div>
+        <div style="height: 36px; background: #eaeff2; border-radius: 12px; margin-bottom: 8px;"></div>
+        <div style="height: 36px; background: #eaeff2; border-radius: 12px; margin-bottom: 12px;"></div>
+        <div style="display: flex; gap: 8px;">
+          <div style="flex: 1; height: 32px; background: #eaeff2; border-radius: 10px;"></div>
+          <div style="flex: 1; height: 32px; background: #005bc4; border-radius: 10px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Fade + Scale Up</h3>
+      <p>Modal fades in while scaling from 95% to 100%. Backdrop fades simultaneously. Smooth and professional. Used by most modern apps.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Slide from Bottom -->
+  <div class="card" data-choice="slide-up" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: #f7f9fb; display: flex; align-items: flex-end; justify-content: center; min-height: 220px; position: relative; overflow: hidden;">
+      <!-- Backdrop -->
+      <div style="position: absolute; inset: 0; background: rgba(44,52,55,0.3); animation: fadeIn 0.8s ease infinite alternate;"></div>
+      <!-- Modal sliding up -->
+      <div style="position: relative; width: 80%; max-width: 280px; background: white; border-radius: 24px 24px 0 0; padding: 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); animation: slideUp 0.8s ease infinite alternate;">
+        <div style="width: 40px; height: 4px; background: #acb3b7; border-radius: 4px; margin: 0 auto 16px;"></div>
+        <div style="height: 12px; width: 50%; background: #2c3437; border-radius: 6px; margin-bottom: 12px;"></div>
+        <div style="height: 36px; background: #eaeff2; border-radius: 12px; margin-bottom: 8px;"></div>
+        <div style="height: 36px; background: #eaeff2; border-radius: 12px; margin-bottom: 12px;"></div>
+        <div style="display: flex; gap: 8px;">
+          <div style="flex: 1; height: 32px; background: #eaeff2; border-radius: 10px;"></div>
+          <div style="flex: 1; height: 32px; background: #005bc4; border-radius: 10px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Slide Up (Bottom Sheet)</h3>
+      <p>Modal slides up from the bottom like a sheet. Feels native on mobile, natural gesture-based feel. Used by iOS, Google Maps, Spotify.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Fade + Slide Down -->
+  <div class="card" data-choice="fade-slide-down" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: #f7f9fb; display: flex; align-items: center; justify-content: center; min-height: 220px; position: relative; overflow: hidden;">
+      <!-- Backdrop -->
+      <div style="position: absolute; inset: 0; background: rgba(44,52,55,0.3); animation: fadeIn 0.8s ease infinite alternate;"></div>
+      <!-- Modal -->
+      <div style="position: relative; width: 80%; max-width: 280px; background: white; border-radius: 24px; padding: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.12); animation: slideDown 0.8s ease infinite alternate;">
+        <div style="height: 12px; width: 50%; background: #2c3437; border-radius: 6px; margin-bottom: 12px;"></div>
+        <div style="height: 36px; background: #eaeff2; border-radius: 12px; margin-bottom: 8px;"></div>
+        <div style="height: 36px; background: #eaeff2; border-radius: 12px; margin-bottom: 12px;"></div>
+        <div style="display: flex; gap: 8px;">
+          <div style="flex: 1; height: 32px; background: #eaeff2; border-radius: 10px;"></div>
+          <div style="flex: 1; height: 32px; background: #005bc4; border-radius: 10px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Fade + Slide Down</h3>
+      <p>Modal fades in while sliding down from above. Feels like content dropping into place. Subtle and elegant. Used by Notion, Linear.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

@@ -1,0 +1,129 @@
+<h2>Time-Based Habit Cells</h2>
+<p class="subtitle">How should the mini bar look inside each table cell for hour-tracked habits?</p>
+
+<div class="cards">
+  <!-- Option A: Vertical fill bar -->
+  <div class="card" data-choice="vertical-bar" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: #f7f9fb; min-height: 200px;">
+      <div style="font-size:12px; color:#6b7280; margin-bottom:12px;">Example: "Study 8h/week" — showing Mon–Sun cells</div>
+
+      <div style="display:grid; grid-template-columns: 120px repeat(7, 1fr) 70px; gap:4px; align-items:end; text-align:center;">
+        <span style="text-align:left; font-size:13px; padding-left:4px;">📘 Study</span>
+        <!-- Mon: 2h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+          <span style="font-size:9px; color:#6b7280;">2h</span>
+          <div style="width:16px; height:40px; background:#e0e4e7; border-radius:4px; position:relative; overflow:hidden;">
+            <div style="position:absolute; bottom:0; width:100%; height:100%; background:#005bc4; border-radius:4px;"></div>
+          </div>
+        </div>
+        <!-- Tue: 1.5h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+          <span style="font-size:9px; color:#6b7280;">1.5h</span>
+          <div style="width:16px; height:40px; background:#e0e4e7; border-radius:4px; position:relative; overflow:hidden;">
+            <div style="position:absolute; bottom:0; width:100%; height:75%; background:#005bc4; border-radius:4px;"></div>
+          </div>
+        </div>
+        <!-- Wed: 0h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+          <span style="font-size:9px; color:#9ca3af;">0</span>
+          <div style="width:16px; height:40px; background:#e0e4e7; border-radius:4px; position:relative; overflow:hidden;">
+          </div>
+        </div>
+        <!-- Thu: 2h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+          <span style="font-size:9px; color:#6b7280;">2h</span>
+          <div style="width:16px; height:40px; background:#e0e4e7; border-radius:4px; position:relative; overflow:hidden;">
+            <div style="position:absolute; bottom:0; width:100%; height:100%; background:#005bc4; border-radius:4px;"></div>
+          </div>
+        </div>
+        <!-- Fri: 1h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+          <span style="font-size:9px; color:#6b7280;">1h</span>
+          <div style="width:16px; height:40px; background:#e0e4e7; border-radius:4px; position:relative; overflow:hidden;">
+            <div style="position:absolute; bottom:0; width:100%; height:50%; background:#005bc4; border-radius:4px;"></div>
+          </div>
+        </div>
+        <!-- Sat: 1.5h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+          <span style="font-size:9px; color:#6b7280;">1.5h</span>
+          <div style="width:16px; height:40px; background:#e0e4e7; border-radius:4px; position:relative; overflow:hidden;">
+            <div style="position:absolute; bottom:0; width:100%; height:75%; background:#005bc4; border-radius:4px;"></div>
+          </div>
+        </div>
+        <!-- Sun -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+          <span style="font-size:9px; color:#9ca3af;">—</span>
+          <div style="width:16px; height:40px; background:#f0f4f7; border-radius:4px; border:1px dashed #d1d5db;"></div>
+        </div>
+        <!-- Total -->
+        <span style="font-size:12px; font-weight:700; color:#005bc4;">8/8h ✓</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Vertical Fill Bars</h3>
+      <p>Small vertical bars that fill proportionally to time logged. Height = % of max daily amount (e.g., 2h = full bar if daily max is 2h). Hours label above each bar.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Horizontal mini bar -->
+  <div class="card" data-choice="horizontal-bar" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: #f7f9fb; min-height: 200px;">
+      <div style="font-size:12px; color:#6b7280; margin-bottom:12px;">Example: "Study 8h/week" — showing Mon–Sun cells</div>
+
+      <div style="display:grid; grid-template-columns: 120px repeat(7, 1fr) 70px; gap:4px; align-items:center; text-align:center;">
+        <span style="text-align:left; font-size:13px; padding-left:4px;">📘 Study</span>
+        <!-- Mon: 2h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#2c3437; font-weight:600;">2h</span>
+          <div style="width:80%; height:5px; background:#e0e4e7; border-radius:3px; overflow:hidden;">
+            <div style="width:100%; height:100%; background:#005bc4; border-radius:3px;"></div>
+          </div>
+        </div>
+        <!-- Tue: 1.5h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#2c3437; font-weight:600;">1.5h</span>
+          <div style="width:80%; height:5px; background:#e0e4e7; border-radius:3px; overflow:hidden;">
+            <div style="width:75%; height:100%; background:#005bc4; border-radius:3px;"></div>
+          </div>
+        </div>
+        <!-- Wed: 0h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#9ca3af;">0</span>
+          <div style="width:80%; height:5px; background:#e0e4e7; border-radius:3px;"></div>
+        </div>
+        <!-- Thu: 2h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#2c3437; font-weight:600;">2h</span>
+          <div style="width:80%; height:5px; background:#e0e4e7; border-radius:3px; overflow:hidden;">
+            <div style="width:100%; height:100%; background:#005bc4; border-radius:3px;"></div>
+          </div>
+        </div>
+        <!-- Fri: 1h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#2c3437; font-weight:600;">1h</span>
+          <div style="width:80%; height:5px; background:#e0e4e7; border-radius:3px; overflow:hidden;">
+            <div style="width:50%; height:100%; background:#005bc4; border-radius:3px;"></div>
+          </div>
+        </div>
+        <!-- Sat: 1.5h -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#2c3437; font-weight:600;">1.5h</span>
+          <div style="width:80%; height:5px; background:#e0e4e7; border-radius:3px; overflow:hidden;">
+            <div style="width:75%; height:100%; background:#005bc4; border-radius:3px;"></div>
+          </div>
+        </div>
+        <!-- Sun -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+          <span style="font-size:10px; color:#9ca3af;">—</span>
+          <div style="width:80%; height:5px; background:#f0f4f7; border-radius:3px; border:1px dashed #d1d5db;"></div>
+        </div>
+        <!-- Total -->
+        <span style="font-size:12px; font-weight:700; color:#005bc4;">8/8h ✓</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Horizontal Mini Bars</h3>
+      <p>Small horizontal progress bar under the hours label. Fills proportionally. Consistent row height with checkmark habits — table stays compact and uniform.</p>
+    </div>
+  </div>
+</div>

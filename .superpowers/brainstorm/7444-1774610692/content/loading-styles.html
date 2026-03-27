@@ -1,0 +1,82 @@
+<h2>What loading style do you prefer while pages load?</h2>
+<p class="subtitle">This replaces the current plain "Loading..." text. Pick the approach that feels right for your app.</p>
+
+<div class="cards">
+  <!-- Option A: Skeleton Screens -->
+  <div class="card" data-choice="skeleton" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: #f7f9fb;">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <!-- Skeleton header -->
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(90deg, #eaeff2 25%, #f0f4f7 50%, #eaeff2 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite;"></div>
+          <div style="flex: 1;">
+            <div style="height: 14px; width: 60%; border-radius: 8px; background: linear-gradient(90deg, #eaeff2 25%, #f0f4f7 50%, #eaeff2 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; margin-bottom: 8px;"></div>
+            <div style="height: 10px; width: 40%; border-radius: 8px; background: linear-gradient(90deg, #eaeff2 25%, #f0f4f7 50%, #eaeff2 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite;"></div>
+          </div>
+        </div>
+        <!-- Skeleton cards -->
+        <div style="display: flex; gap: 12px;">
+          <div style="flex: 1; height: 80px; border-radius: 16px; background: linear-gradient(90deg, #eaeff2 25%, #f0f4f7 50%, #eaeff2 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite;"></div>
+          <div style="flex: 1; height: 80px; border-radius: 16px; background: linear-gradient(90deg, #eaeff2 25%, #f0f4f7 50%, #eaeff2 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; animation-delay: 0.2s;"></div>
+        </div>
+        <!-- Skeleton list items -->
+        <div style="height: 56px; border-radius: 12px; background: linear-gradient(90deg, #eaeff2 25%, #f0f4f7 50%, #eaeff2 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; animation-delay: 0.4s;"></div>
+        <div style="height: 56px; border-radius: 12px; background: linear-gradient(90deg, #eaeff2 25%, #f0f4f7 50%, #eaeff2 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; animation-delay: 0.6s;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Skeleton Screens</h3>
+      <p>Ghost shapes that mimic the page layout with a shimmer effect. Feels like the page is "building" itself. Used by Facebook, YouTube, LinkedIn.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Zen Spinner -->
+  <div class="card" data-choice="spinner" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: #f7f9fb; display: flex; align-items: center; justify-content: center; min-height: 180px;">
+      <div style="position: relative; width: 64px; height: 64px;">
+        <svg viewBox="0 0 64 64" style="animation: spin 1.2s linear infinite; width: 64px; height: 64px;">
+          <circle cx="32" cy="32" r="28" fill="none" stroke="#eaeff2" stroke-width="4"/>
+          <circle cx="32" cy="32" r="28" fill="none" stroke="#006d4a" stroke-width="4" stroke-dasharray="44 132" stroke-linecap="round"/>
+        </svg>
+        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 20px;">🧘</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Zen Spinner</h3>
+      <p>A branded circular spinner with your app's green color and a mindfulness icon. Simple, centered, then content fades in. Clean and focused.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Progressive Fade -->
+  <div class="card" data-choice="progressive" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: #f7f9fb;">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="opacity: 1; transform: translateY(0); height: 48px; border-radius: 12px; background: #e3e9ed; display: flex; align-items: center; padding: 0 16px; font-size: 13px; color: #596064; font-family: Manrope, sans-serif;">Header area (loaded)</div>
+        <div style="opacity: 0.6; transform: translateY(4px); height: 48px; border-radius: 12px; background: #e3e9ed; display: flex; align-items: center; padding: 0 16px; font-size: 13px; color: #596064; font-family: Manrope, sans-serif; transition: all 0.5s; animation: fadeSlideIn 1s ease 0.2s infinite alternate;">Card 1 (appearing...)</div>
+        <div style="opacity: 0.3; transform: translateY(8px); height: 48px; border-radius: 12px; background: #e3e9ed; display: flex; align-items: center; padding: 0 16px; font-size: 13px; color: #596064; font-family: Manrope, sans-serif; animation: fadeSlideIn 1s ease 0.4s infinite alternate;">Card 2 (appearing...)</div>
+        <div style="opacity: 0.1; transform: translateY(12px); height: 48px; border-radius: 12px; background: #e3e9ed; display: flex; align-items: center; padding: 0 16px; font-size: 13px; color: #596064; font-family: Manrope, sans-serif; animation: fadeSlideIn 1s ease 0.6s infinite alternate;">Card 3 (appearing...)</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Progressive Fade-In</h3>
+      <p>Content fades and slides in from bottom, one section at a time with staggered delay. No placeholder — just sections appearing gracefully. Used by Apple.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes fadeSlideIn {
+    from { opacity: 0.1; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
