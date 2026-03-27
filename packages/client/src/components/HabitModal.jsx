@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HABIT_ICONS } from '@mindful-flow/shared/constants';
+import { HABIT_ICONS, TRACKING_TYPES } from '@mindful-flow/shared/constants';
+import { useCategories } from '../hooks/useCategories';
 
 export default function HabitModal({ open, onClose, onSave, habit = null }) {
   const [name, setName] = useState('');
@@ -9,6 +10,10 @@ export default function HabitModal({ open, onClose, onSave, habit = null }) {
   const [icon, setIcon] = useState('check_circle');
   const [color, setColor] = useState('primary');
   const [description, setDescription] = useState('');
+  const { data: categories = [] } = useCategories();
+  const [categoryId, setCategoryId] = useState('');
+  const [trackingType, setTrackingType] = useState('checkmark');
+  const [weeklyTarget, setWeeklyTarget] = useState(8);
 
   useEffect(() => {
     if (habit) {
@@ -18,6 +23,9 @@ export default function HabitModal({ open, onClose, onSave, habit = null }) {
       setIcon(habit.icon);
       setColor(habit.color);
       setDescription(habit.description || '');
+      setCategoryId(habit.categoryId?._id || habit.categoryId || '');
+      setTrackingType(habit.trackingType || 'checkmark');
+      setWeeklyTarget(habit.weeklyTarget || 8);
     } else {
       setName('');
       setFrequency('daily');
@@ -25,12 +33,28 @@ export default function HabitModal({ open, onClose, onSave, habit = null }) {
       setIcon('check_circle');
       setColor('primary');
       setDescription('');
+      setCategoryId('');
+      setTrackingType('checkmark');
+      setWeeklyTarget(8);
     }
   }, [habit, open]);
 
   function handleSubmit(e) {
     e.preventDefault();
-    onSave({ name, frequency, target: frequency === 'daily' ? 1 : target, icon, color, description });
+    const data = {
+      name, icon, color, description,
+      categoryId: categoryId || null,
+      trackingType,
+    };
+    if (trackingType === 'checkmark') {
+      data.frequency = frequency;
+      data.target = frequency === 'daily' ? 1 : target;
+    } else {
+      data.frequency = 'weekly';
+      data.weeklyTarget = weeklyTarget;
+      data.target = 1;
+    }
+    onSave(data);
   }
 
   return (
@@ -67,6 +91,45 @@ export default function HabitModal({ open, onClose, onSave, habit = null }) {
                     placeholder="e.g., Morning Yoga" />
                 </div>
                 <div>
+                  <label className="block text-sm font-bold text-on-surface-variant mb-1">Category</label>
+                  <select
+                    value={categoryId}
+                    onChange={(e) => setCategoryId(e.target.value)}
+                    className="w-full px-5 py-4 rounded-2xl bg-surface-container border-none focus:ring-2 focus:ring-primary/20 text-on-surface font-medium"
+                  >
+                    <option value="">None</option>
+                    {categories.map((cat) => (
+                      <option key={cat._id} value={cat._id}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-on-surface-variant mb-1">Tracking Type</label>
+                  <div className="grid grid-cols-2 p-1.5 bg-surface-container rounded-2xl">
+                    <button type="button" onClick={() => setTrackingType('checkmark')}
+                      className={`py-3 rounded-xl font-bold transition-all ${trackingType === 'checkmark' ? 'bg-surface-container-lowest shadow-sm text-primary' : 'text-on-surface-variant'}`}>
+                      Checkmark
+                    </button>
+                    <button type="button" onClick={() => setTrackingType('duration')}
+                      className={`py-3 rounded-xl font-bold transition-all ${trackingType === 'duration' ? 'bg-surface-container-lowest shadow-sm text-primary' : 'text-on-surface-variant'}`}>
+                      Duration
+                    </button>
+                  </div>
+                </div>
+                {trackingType === 'duration' && (
+                  <div>
+                    <label className="block text-sm font-bold text-on-surface-variant mb-1">Weekly Target (hours)</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="168"
+                      value={weeklyTarget}
+                      onChange={(e) => setWeeklyTarget(Number(e.target.value))}
+                      className="w-full px-5 py-4 rounded-2xl bg-surface-container border-none focus:ring-2 focus:ring-primary/20 text-on-surface font-medium"
+                    />
+                  </div>
+                )}
+                <div>
                   <label className="block text-sm font-bold text-on-surface-variant mb-1">Icon</label>
                   <div className="flex flex-wrap gap-2">
                     {HABIT_ICONS.map((ic) => (
@@ -86,24 +149,28 @@ export default function HabitModal({ open, onClose, onSave, habit = null }) {
                     ))}
                   </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-bold text-on-surface-variant mb-1">Frequency</label>
-                  <div className="grid grid-cols-2 p-1.5 bg-surface-container rounded-2xl">
-                    <button type="button" onClick={() => setFrequency('daily')}
-                      className={`py-3 rounded-xl font-bold transition-all ${frequency === 'daily' ? 'bg-surface-container-lowest shadow-sm text-primary' : 'text-on-surface-variant'}`}>Daily</button>
-                    <button type="button" onClick={() => setFrequency('weekly')}
-                      className={`py-3 rounded-xl font-bold transition-all ${frequency === 'weekly' ? 'bg-surface-container-lowest shadow-sm text-primary' : 'text-on-surface-variant'}`}>Weekly</button>
-                  </div>
-                </div>
-                {frequency === 'weekly' && (
-                  <div>
-                    <label className="block text-sm font-bold text-on-surface-variant mb-1">Weekly Target</label>
-                    <div className="flex items-center gap-4">
-                      <input type="range" min="1" max="7" value={target} onChange={(e) => setTarget(Number(e.target.value))}
-                        className="flex-1 accent-primary h-2 bg-surface-container rounded-full" />
-                      <span className="w-12 h-12 flex items-center justify-center bg-primary-container text-on-primary font-bold rounded-xl">{target}</span>
+                {trackingType === 'checkmark' && (
+                  <>
+                    <div>
+                      <label className="block text-sm font-bold text-on-surface-variant mb-1">Frequency</label>
+                      <div className="grid grid-cols-2 p-1.5 bg-surface-container rounded-2xl">
+                        <button type="button" onClick={() => setFrequency('daily')}
+                          className={`py-3 rounded-xl font-bold transition-all ${frequency === 'daily' ? 'bg-surface-container-lowest shadow-sm text-primary' : 'text-on-surface-variant'}`}>Daily</button>
+                        <button type="button" onClick={() => setFrequency('weekly')}
+                          className={`py-3 rounded-xl font-bold transition-all ${frequency === 'weekly' ? 'bg-surface-container-lowest shadow-sm text-primary' : 'text-on-surface-variant'}`}>Weekly</button>
+                      </div>
                     </div>
-                  </div>
+                    {frequency === 'weekly' && (
+                      <div>
+                        <label className="block text-sm font-bold text-on-surface-variant mb-1">Weekly Target</label>
+                        <div className="flex items-center gap-4">
+                          <input type="range" min="1" max="7" value={target} onChange={(e) => setTarget(Number(e.target.value))}
+                            className="flex-1 accent-primary h-2 bg-surface-container rounded-full" />
+                          <span className="w-12 h-12 flex items-center justify-center bg-primary-container text-on-primary font-bold rounded-xl">{target}</span>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
                 <div>
                   <label className="block text-sm font-bold text-on-surface-variant mb-1">Description (optional)</label>
