@@ -5,6 +5,7 @@ import { useWeeklyAnalytics } from '../hooks/useAnalytics';
 import HabitCard from '../components/HabitCard';
 import ProgressRing from '../components/ProgressRing';
 import StatCard from '../components/StatCard';
+import AnimatedList, { AnimatedItem } from '../components/AnimatedList';
 
 function getToday() {
   return new Date().toISOString().split('T')[0];
@@ -52,17 +53,21 @@ export default function Dashboard() {
       </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        <div className="lg:col-span-8 space-y-6">
-          <div className="flex items-center justify-between mb-2">
+        <div className="lg:col-span-8">
+          <div className="flex items-center justify-between mb-8">
             <h2 className="font-headline text-xl font-bold">Daily Rituals</h2>
             <span className="text-sm font-semibold text-primary bg-primary/5 px-3 py-1 rounded-full">
               {completedCount} of {dailyHabits.length} completed
             </span>
           </div>
-          {dailyHabits.map((habit) => (
-            <HabitCard key={habit._id} habit={habit} completed={completedIds.has(habit._id)}
-              onToggle={() => handleToggle(habit)} />
-          ))}
+          <AnimatedList className="space-y-6">
+            {dailyHabits.map((habit) => (
+              <AnimatedItem key={habit._id}>
+                <HabitCard habit={habit} completed={completedIds.has(habit._id)}
+                  onToggle={() => handleToggle(habit)} />
+              </AnimatedItem>
+            ))}
+          </AnimatedList>
           {dailyHabits.length === 0 && (
             <p className="text-on-surface-variant text-center py-12">No daily habits yet. Create one to get started!</p>
           )}
