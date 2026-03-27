@@ -1,0 +1,52 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: mindful-flow-mongodb
+    networks: [internal]
+    volumes: [mongodb_data:/data/db]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+    restart: unless-stopped
+
+  server:
+    image: ${SERVER_IMAGE:-ghcr.io/youssef548/mindful-flow-server:latest}
+    container_name: mindful-flow-server
+    depends_on: [mongodb]
+    environment:
+      MONGO_URI: mongodb://${MONGO_USER}:${MONGO_PASS}@mongodb:27017/mindful-flow?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      NODE_ENV: production
+      PORT: 5000
+      CORS_ORIGIN: https://yfawzy.dev
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [internal]
+    restart: unless-stopped
+
+  client:
+    image: ${CLIENT_IMAGE:-ghcr.io/youssef548/mindful-flow-client:latest}
+    container_name: mindful-flow-client
+    depends_on: [server]
+    networks: [internal, gateway]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mindful-flow.rule=Host(`yfawzy.dev`) && PathPrefix(`/projects/mindful-flow`)"
+      - "traefik.http.routers.mindful-flow.entrypoints=websecure"
+      - "traefik.http.routers.mindful-flow.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.mindful-flow.middlewares=mindful-flow-strip@docker,secure-default@file"
+      - "traefik.http.middlewares.mindful-flow-strip.stripprefix.prefixes=/projects/mindful-flow"
+      - "traefik.http.services.mindful-flow.loadbalancer.server.port=80"
+      - "traefik.docker.network=gateway"
+    restart: unless-stopped
+
+networks:
+  internal: {}
+  gateway:
+    external: true
+
+volumes:
+  mongodb_data: {}
