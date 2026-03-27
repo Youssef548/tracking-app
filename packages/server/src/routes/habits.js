@@ -8,7 +8,7 @@ const { getHabits, createHabit, updateHabit, deleteHabit } = require('../control
 router.use(auth);
 router.get('/', getHabits);
 router.post('/', validate(validateHabitInput), createHabit);
-router.put('/:id', validate(validateHabitInput), updateHabit);
+router.put('/:id', validate(validateHabitInput, true), updateHabit);
 router.delete('/:id', deleteHabit);
 
 module.exports = router;

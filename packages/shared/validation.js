@@ -1,14 +1,20 @@
 const { FREQUENCIES, COLORS, TRACKING_TYPES } = require('./constants');
 
-function validateHabitInput(data) {
+function validateHabitInput(data, isUpdate = false) {
   const errors = {};
-  if (!data.name || data.name.trim().length === 0) {
+  if (!isUpdate && (!data.name || data.name.trim().length === 0)) {
+    errors.name = 'Habit name is required';
+  }
+  if (data.name !== undefined && data.name.trim().length === 0) {
     errors.name = 'Habit name is required';
   }
   if (data.name && data.name.length > 100) {
     errors.name = 'Habit name must be under 100 characters';
   }
-  if (!data.frequency || !Object.values(FREQUENCIES).includes(data.frequency)) {
+  if (!isUpdate && (!data.frequency || !Object.values(FREQUENCIES).includes(data.frequency))) {
+    errors.frequency = 'Frequency must be "daily" or "weekly"';
+  }
+  if (isUpdate && data.frequency !== undefined && !Object.values(FREQUENCIES).includes(data.frequency)) {
     errors.frequency = 'Frequency must be "daily" or "weekly"';
   }
   if (data.frequency === FREQUENCIES.WEEKLY) {
