@@ -1,4 +1,5 @@
 const Habit = require('../models/Habit');
+const { createNotification } = require('../utils/createNotification');
 
 async function getHabits(req, res, next) {
   try {
@@ -29,6 +30,18 @@ async function createHabit(req, res, next) {
       weeklyTarget: trackingType === 'duration' ? weeklyTarget : null,
     });
     const populated = await habit.populate('categoryId', 'name color');
+
+    // First-habit notification (fire-and-forget)
+    const habitCount = await Habit.countDocuments({ userId: req.user._id, isActive: true });
+    if (habitCount === 1) {
+      await createNotification(
+        req.user._id,
+        'achievement',
+        "You're on your way",
+        'Your first habit is set. Show up tomorrow and the streak begins.'
+      );
+    }
+
     res.status(201).json(populated);
   } catch (err) {
     next(err);
