@@ -103,4 +103,118 @@ async function getHabitAnalytics(req, res, next) {
   }
 }
 
-module.exports = { getWeeklyAnalytics, getMonthlyAnalytics, getHabitAnalytics };
+async function weeklyConsistency(req, res, next) {
+  try {
+    const userId = req.user._id;
+    const weekParam = req.query.week;
+
+    let weekStart;
+    if (weekParam) {
+      weekStart = normalizeDate(weekParam);
+    } else {
+      const now = new Date();
+      const day = now.getUTCDay();
+      const diff = day === 0 ? 6 : day - 1;
+      weekStart = new Date(now);
+      weekStart.setUTCDate(now.getUTCDate() - diff);
+      weekStart.setUTCHours(0, 0, 0, 0);
+    }
+
+    const weekEnd = new Date(weekStart);
+    weekEnd.setUTCDate(weekStart.getUTCDate() + 7);
+
+    const habits = await Habit.find({ userId, isActive: true }).populate('categoryId', 'name color');
+    const completions = await Completion.find({
+      userId,
+      date: { $gte: weekStart, $lt: weekEnd },
+    });
+
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const today = normalizeDate(new Date());
+
+    const habitRows = habits.map((habit) => {
+      const days = {};
+      let completedDays = 0;
+      let totalHours = 0;
+
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(weekStart);
+        d.setUTCDate(weekStart.getUTCDate() + i);
+        const dateStr = d.toISOString().split('T')[0];
+        const dayName = dayNames[i];
+
+        const completion = completions.find(
+          (c) => (c.habitId.toString() === habit._id.toString()) &&
+                 normalizeDate(c.date).toISOString().split('T')[0] === dateStr
+        );
+
+        const isFuture = d > today;
+        if (completion) {
+          days[dayName] = { completed: true, value: completion.value };
+          if (habit.trackingType === 'duration') {
+            totalHours += completion.value;
+          }
+          completedDays++;
+        } else {
+          days[dayName] = { completed: false, value: 0, isFuture };
+        }
+      }
+
+      const row = {
+        habitId: habit._id,
+        name: habit.name,
+        icon: habit.icon,
+        trackingType: habit.trackingType || 'checkmark',
+        category: habit.categoryId ? { name: habit.categoryId.name, color: habit.categoryId.color } : null,
+        days,
+      };
+
+      if (habit.trackingType === 'duration') {
+        row.weeklyTarget = habit.weeklyTarget;
+        row.totalHours = totalHours;
+        row.rate = habit.weeklyTarget > 0 ? Math.min(totalHours / habit.weeklyTarget, 1) : 0;
+      } else {
+        const activeDays = Object.values(days).filter((d) => !d.isFuture).length;
+        row.rate = activeDays > 0 ? completedDays / activeDays : 0;
+      }
+
+      return row;
+    });
+
+    const dailyScores = {};
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(weekStart);
+      d.setUTCDate(weekStart.getUTCDate() + i);
+      const dayName = dayNames[i];
+      const isFuture = d > today;
+
+      if (isFuture) {
+        dailyScores[dayName] = null;
+        continue;
+      }
+
+      let completed = 0;
+      for (const habit of habitRows) {
+        if (habit.days[dayName].completed) completed++;
+      }
+      dailyScores[dayName] = habitRows.length > 0 ? completed / habitRows.length : 0;
+    }
+
+    const activeDailyScores = Object.values(dailyScores).filter((s) => s !== null);
+    const overallScore = activeDailyScores.length > 0
+      ? activeDailyScores.reduce((a, b) => a + b, 0) / activeDailyScores.length
+      : 0;
+
+    res.json({
+      weekStart: weekStart.toISOString().split('T')[0],
+      weekEnd: new Date(weekEnd.getTime() - 86400000).toISOString().split('T')[0],
+      habits: habitRows,
+      dailyScores,
+      overallScore: Math.round(overallScore * 100) / 100,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { getWeeklyAnalytics, getMonthlyAnalytics, getHabitAnalytics, weeklyConsistency };
