@@ -1,6 +1,6 @@
 # Stage 1: Install dependencies and build
 FROM node:20-alpine AS builder
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
 WORKDIR /app
 
 # Copy workspace root files
@@ -10,7 +10,9 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/shared/package.json ./packages/shared/
 COPY packages/client/package.json ./packages/client/
 
-RUN pnpm install --frozen-lockfile
+# Use hoisted node-linker to avoid broken symlinks in Docker
+# (pnpm lockfile from Windows contains Windows paths in symlinks)
+RUN echo "node-linker=hoisted" > .npmrc && pnpm install --no-frozen-lockfile
 
 # Copy source code
 COPY packages/shared/ ./packages/shared/
@@ -22,8 +24,14 @@ ARG VITE_BASE_PATH
 ENV VITE_API_BASE=$VITE_API_BASE
 ENV VITE_BASE_PATH=$VITE_BASE_PATH
 
-# Build client (from workspace root so pnpm workspace resolution works)
-RUN pnpm --filter @mindful-flow/client build
+# Fix workspace symlink (pnpm creates Windows-path symlinks from lockfile)
+RUN mkdir -p /app/node_modules/@mindful-flow && \
+    rm -rf /app/node_modules/@mindful-flow/shared && \
+    ln -s /app/packages/shared /app/node_modules/@mindful-flow/shared
+
+# Build client — invoke vite directly from hoisted node_modules
+# (pnpm's .bin shims break in Docker when lockfile is from Windows)
+RUN cd packages/client && node /app/node_modules/vite/bin/vite.js build
 
 # Stage 2: Serve with nginx
 FROM nginx:alpine
