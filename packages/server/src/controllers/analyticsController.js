@@ -13,15 +13,25 @@ async function getWeeklyAnalytics(req, res, next) {
 
     let totalTarget = 0;
     for (const h of habits) {
-      totalTarget += h.frequency === 'daily' ? 7 : h.target;
+      if (h.frequency === 'daily') {
+        const created = normalizeDate(h.createdAt);
+        const effectiveStart = created > start ? created : start;
+        const daysActive = Math.max(0, Math.ceil((end - effectiveStart) / 86400000));
+        totalTarget += Math.min(daysActive, 7);
+      } else {
+        totalTarget += h.target;
+      }
     }
 
     const completedCount = completions.length;
     const score = totalTarget > 0 ? Math.round((completedCount / totalTarget) * 100) : 0;
 
-    const dailyHabitCount = habits.filter(h => h.frequency === 'daily').length;
-    const allCompletions = await Completion.find({ userId }).sort({ date: -1 });
-    const streak = calculateStreak(allCompletions, dailyHabitCount);
+    const dailyHabits = habits.filter(h => h.frequency === 'daily');
+    const streakCutoff = new Date();
+    streakCutoff.setUTCDate(streakCutoff.getUTCDate() - 365);
+    streakCutoff.setUTCHours(0, 0, 0, 0);
+    const allCompletions = await Completion.find({ userId, date: { $gte: streakCutoff } }).sort({ date: -1 });
+    const streak = calculateStreak(allCompletions, dailyHabits);
 
     const dayData = [];
     for (let i = 0; i < 7; i++) {
@@ -69,18 +79,25 @@ async function getHabitAnalytics(req, res, next) {
       return res.status(404).json({ error: { message: 'Habit not found', code: 'NOT_FOUND' } });
     }
 
-    const completions = await Completion.find({ habitId: habit._id }).sort({ date: -1 });
-
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setUTCDate(thirtyDaysAgo.getUTCDate() - 30);
     thirtyDaysAgo.setUTCHours(0, 0, 0, 0);
-    const recentCompletions = completions.filter(c => c.date >= thirtyDaysAgo);
+
+    const recentCompletions = await Completion.find({
+      habitId: habit._id,
+      date: { $gte: thirtyDaysAgo },
+    }).sort({ date: -1 });
+
+    const habitCreated = normalizeDate(habit.createdAt);
+    const effectiveStart = habitCreated > thirtyDaysAgo ? habitCreated : thirtyDaysAgo;
+    const daysSinceCreation = Math.max(1, Math.ceil((new Date().setUTCHours(0,0,0,0) - effectiveStart) / 86400000) + 1);
 
     let expectedDays;
     if (habit.frequency === 'daily') {
-      expectedDays = 30;
+      expectedDays = Math.min(daysSinceCreation, 30);
     } else {
-      expectedDays = Math.round((30 / 7) * habit.target);
+      const weeksActive = daysSinceCreation / 7;
+      expectedDays = Math.round(weeksActive * habit.target);
     }
 
     const completionRate = expectedDays > 0 ? Math.round((recentCompletions.length / expectedDays) * 100) : 0;
@@ -90,7 +107,7 @@ async function getHabitAnalytics(req, res, next) {
       const today = new Date();
       today.setUTCHours(0, 0, 0, 0);
       const current = new Date(today);
-      const dateSet = new Set(completions.map(c => normalizeDate(c.date).toISOString().split('T')[0]));
+      const dateSet = new Set(recentCompletions.map(c => normalizeDate(c.date).toISOString().split('T')[0]));
       while (dateSet.has(current.toISOString().split('T')[0])) {
         streakDays++;
         current.setUTCDate(current.getUTCDate() - 1);
@@ -132,10 +149,18 @@ async function weeklyConsistency(req, res, next) {
     const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const today = normalizeDate(new Date());
 
+    // Pre-index completions by habitId+date for O(1) lookup
+    const completionMap = new Map();
+    for (const c of completions) {
+      const key = `${c.habitId.toString()}_${normalizeDate(c.date).toISOString().split('T')[0]}`;
+      completionMap.set(key, c);
+    }
+
     const habitRows = habits.map((habit) => {
       const days = {};
       let completedDays = 0;
       let totalHours = 0;
+      const habitCreated = normalizeDate(habit.createdAt);
 
       for (let i = 0; i < 7; i++) {
         const d = new Date(weekStart);
@@ -143,12 +168,16 @@ async function weeklyConsistency(req, res, next) {
         const dateStr = d.toISOString().split('T')[0];
         const dayName = dayNames[i];
 
-        const completion = completions.find(
-          (c) => (c.habitId.toString() === habit._id.toString()) &&
-                 normalizeDate(c.date).toISOString().split('T')[0] === dateStr
-        );
-
         const isFuture = d > today;
+        const isBeforeCreation = d < habitCreated;
+
+        if (isFuture || isBeforeCreation) {
+          days[dayName] = { completed: false, value: 0, isFuture: true };
+          continue;
+        }
+
+        const completion = completionMap.get(`${habit._id.toString()}_${dateStr}`);
+
         if (completion) {
           days[dayName] = { completed: true, value: completion.value };
           if (habit.trackingType === 'duration') {
@@ -156,7 +185,7 @@ async function weeklyConsistency(req, res, next) {
           }
           completedDays++;
         } else {
-          days[dayName] = { completed: false, value: 0, isFuture };
+          days[dayName] = { completed: false, value: 0, isFuture: false };
         }
       }
 
@@ -194,10 +223,14 @@ async function weeklyConsistency(req, res, next) {
       }
 
       let completed = 0;
+      let activeHabits = 0;
       for (const habit of habitRows) {
-        if (habit.days[dayName].completed) completed++;
+        if (!habit.days[dayName].isFuture) {
+          activeHabits++;
+          if (habit.days[dayName].completed) completed++;
+        }
       }
-      dailyScores[dayName] = habitRows.length > 0 ? completed / habitRows.length : 0;
+      dailyScores[dayName] = activeHabits > 0 ? completed / activeHabits : null;
     }
 
     const activeDailyScores = Object.values(dailyScores).filter((s) => s !== null);
