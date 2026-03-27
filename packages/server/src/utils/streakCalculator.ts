@@ -1,0 +1,31 @@
+import { normalizeDate } from './dateHelpers';
+import type { CompletionDocument } from '../models/Completion';
+
+export function calculateStreak(completions: CompletionDocument[], dailyHabitCount: number): number {
+  if (dailyHabitCount === 0) return 0;
+
+  const completionsByDate: Record<string, number> = {};
+  for (const c of completions) {
+    const key = normalizeDate(c.date).toISOString().split('T')[0] ?? '';
+    completionsByDate[key] = (completionsByDate[key] ?? 0) + 1;
+  }
+
+  let streak = 0;
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+
+  const current = new Date(today);
+
+  while (true) {
+    const key = current.toISOString().split('T')[0] ?? '';
+    const count = completionsByDate[key] ?? 0;
+    if (count >= dailyHabitCount) {
+      streak++;
+      current.setUTCDate(current.getUTCDate() - 1);
+    } else {
+      break;
+    }
+  }
+
+  return streak;
+}

@@ -1,12 +1,12 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const app = require('../src/index');
-const Notification = require('../src/models/Notification');
+import request from 'supertest';
+import mongoose from 'mongoose';
+import app from '../src/index';
+import Notification from '../src/models/Notification';
 
-async function clearDB() {
+async function clearDB(): Promise<void> {
   const collections = mongoose.connection.collections;
   for (const key in collections) {
-    await collections[key].deleteMany({});
+    await collections[key]!.deleteMany({});
   }
 }
 
@@ -16,16 +16,18 @@ const testUser = {
   password: 'password123',
 };
 
-let token;
-let userId;
-let habitId;
-let completionId;
-let notificationId;
+let token: string;
+let userId: string;
+let habitId: string;
+let completionId: string;
+let notificationId: string;
 
 // Helper: register and get token
-async function registerAndGetToken(user = testUser) {
+async function registerAndGetToken(
+  user = testUser,
+): Promise<{ token: string; userId: string }> {
   const res = await request(app).post('/api/auth/register').send(user);
-  return { token: res.body.token, userId: res.body.user._id };
+  return { token: res.body.token as string, userId: res.body.user._id as string };
 }
 
 // ─── Auth ────────────────────────────────────────────────────────────
@@ -83,9 +85,7 @@ describe('Auth endpoints', () => {
   });
 
   it('GET /me — should return current user', async () => {
-    const res = await request(app)
-      .get('/api/auth/me')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/auth/me').set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(200);
     expect(res.body.user).toHaveProperty('email', testUser.email);
   });
@@ -115,7 +115,7 @@ describe('Auth endpoints', () => {
 // ─── Profile update ──────────────────────────────────────────────────
 
 describe('Profile update', () => {
-  let profileToken;
+  let profileToken: string;
 
   beforeAll(async () => {
     const res = await request(app).post('/api/auth/register').send({
@@ -215,9 +215,7 @@ describe('Habits endpoints', () => {
   });
 
   it('POST /habits — should reject without auth', async () => {
-    const res = await request(app)
-      .post('/api/habits')
-      .send({ name: 'Read', frequency: 'daily' });
+    const res = await request(app).post('/api/habits').send({ name: 'Read', frequency: 'daily' });
     expect(res.status).toBe(401);
   });
 
@@ -230,9 +228,7 @@ describe('Habits endpoints', () => {
   });
 
   it('GET /habits — should return user habits', async () => {
-    const res = await request(app)
-      .get('/api/habits')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/habits').set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBeGreaterThanOrEqual(1);
@@ -265,9 +261,7 @@ describe('Habits endpoints', () => {
   });
 
   it('GET /habits — should not list soft-deleted habits by default', async () => {
-    const res = await request(app)
-      .get('/api/habits')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/habits').set('Authorization', `Bearer ${token}`);
     expect(res.body.length).toBe(0);
   });
 });
@@ -424,15 +418,13 @@ describe('Analytics endpoints', () => {
 // ─── Analytics — monthly with from/to ─────────────────────────────────
 
 describe('Analytics — monthly with from/to', () => {
-  let monthlyToken;
-  let monthlyUserId;
-  let monthlyHabitId;
+  let monthlyToken: string;
+  let monthlyHabitId: string;
 
   beforeAll(async () => {
     await clearDB();
     const auth = await registerAndGetToken();
     monthlyToken = auth.token;
-    monthlyUserId = auth.userId;
 
     const habitRes = await request(app)
       .post('/api/habits')
@@ -535,7 +527,7 @@ describe('Notifications endpoints', () => {
     const check = await request(app)
       .get('/api/notifications')
       .set('Authorization', `Bearer ${token}`);
-    const unread = check.body.filter((n) => !n.isRead);
+    const unread = (check.body as Array<{ isRead: boolean }>).filter((n) => !n.isRead);
     expect(unread.length).toBe(0);
   });
 });
@@ -543,7 +535,7 @@ describe('Notifications endpoints', () => {
 // ─── Notification triggers ──────────────────────────────────────────
 
 describe('Notification triggers', () => {
-  let triggerToken;
+  let triggerToken: string;
 
   beforeAll(async () => {
     const res = await request(app).post('/api/auth/register').send({
@@ -565,9 +557,11 @@ describe('Notification triggers', () => {
       .set('Authorization', `Bearer ${triggerToken}`);
 
     expect(res.status).toBe(200);
-    const firstHabitNotif = res.body.find((n) => n.title === "You're on your way");
+    const firstHabitNotif = (res.body as Array<{ title: string; type: string }>).find(
+      (n) => n.title === "You're on your way",
+    );
     expect(firstHabitNotif).toBeDefined();
-    expect(firstHabitNotif.type).toBe('achievement');
+    expect(firstHabitNotif!.type).toBe('achievement');
   });
 
   it('POST /habits — does not duplicate first-habit notification on second habit', async () => {
@@ -580,7 +574,9 @@ describe('Notification triggers', () => {
       .get('/api/notifications')
       .set('Authorization', `Bearer ${triggerToken}`);
 
-    const notifs = res.body.filter((n) => n.title === "You're on your way");
+    const notifs = (res.body as Array<{ title: string }>).filter(
+      (n) => n.title === "You're on your way",
+    );
     expect(notifs.length).toBe(1);
   });
 
@@ -589,7 +585,7 @@ describe('Notification triggers', () => {
     const habitsRes = await request(app)
       .get('/api/habits')
       .set('Authorization', `Bearer ${triggerToken}`);
-    const firstHabitId = habitsRes.body[0]._id;
+    const firstHabitId = (habitsRes.body as Array<{ _id: string }>)[0]!._id;
 
     await request(app)
       .post('/api/completions')
@@ -600,26 +596,27 @@ describe('Notification triggers', () => {
       .get('/api/notifications')
       .set('Authorization', `Bearer ${triggerToken}`);
 
-    const notif = res.body.find((n) => n.title === 'First check-in');
+    const notif = (res.body as Array<{ title: string; type: string }>).find(
+      (n) => n.title === 'First check-in',
+    );
     expect(notif).toBeDefined();
-    expect(notif.type).toBe('achievement');
+    expect(notif!.type).toBe('achievement');
   });
 
   it('POST /completions — creates streak notification at 3-day milestone', async () => {
     // Use a fresh user with exactly 1 daily habit so calculateStreak(completions, 1) fires correctly.
-    // triggerToken's user has 2 daily habits, which would require 2 completions/day for streak.
     const streakUserRes = await request(app).post('/api/auth/register').send({
       name: 'Streak User',
       email: 'streak@example.com',
       password: 'password123',
     });
-    const streakToken = streakUserRes.body.token;
+    const streakToken = streakUserRes.body.token as string;
 
     const habitRes = await request(app)
       .post('/api/habits')
       .set('Authorization', `Bearer ${streakToken}`)
       .send({ name: 'Run', frequency: 'daily' });
-    const habitId = habitRes.body._id;
+    const localHabitId = habitRes.body._id as string;
 
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
@@ -633,16 +630,18 @@ describe('Notification triggers', () => {
       await request(app)
         .post('/api/completions')
         .set('Authorization', `Bearer ${streakToken}`)
-        .send({ habitId, date });
+        .send({ habitId: localHabitId, date });
     }
 
     const res = await request(app)
       .get('/api/notifications')
       .set('Authorization', `Bearer ${streakToken}`);
 
-    const streakNotif = res.body.find((n) => n.title === '🔥 3-day streak');
+    const streakNotif = (res.body as Array<{ title: string; type: string }>).find(
+      (n) => n.title === '🔥 3-day streak',
+    );
     expect(streakNotif).toBeDefined();
-    expect(streakNotif.type).toBe('streak');
+    expect(streakNotif!.type).toBe('streak');
   });
 });
 

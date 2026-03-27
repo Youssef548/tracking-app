@@ -4,4 +4,11 @@ module.exports = {
   testEnvironment: 'node',
   setupFilesAfterEnv: ['./__tests__/setup.ts'],
   testMatch: ['**/__tests__/**/*.test.ts'],
+  globals: {
+    'ts-jest': {
+      diagnostics: {
+        ignoreCodes: [151002],
+      },
+    },
+  },
 };

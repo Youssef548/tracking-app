@@ -1,60 +1,80 @@
-const Completion = require('../models/Completion');
-const Habit = require('../models/Habit');
-const Notification = require('../models/Notification');
-const { normalizeDate } = require('../utils/dateHelpers');
-const { calculateStreak } = require('../utils/streakCalculator');
-const { createNotification } = require('../utils/createNotification');
+import { Request, Response, NextFunction } from 'express';
+import Completion, { CompletionDocument } from '../models/Completion';
+import Habit from '../models/Habit';
+import Notification from '../models/Notification';
+import { normalizeDate } from '../utils/dateHelpers';
+import { calculateStreak } from '../utils/streakCalculator';
+import { createNotification } from '../utils/createNotification';
+import type { Types } from 'mongoose';
 
 const STREAK_MILESTONES = new Set([3, 7, 14, 30, 60, 100]);
 
-async function getCompletions(req, res, next) {
+export async function getCompletions(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const filter = { userId: req.user._id };
-    if (req.query.date) {
-      const d = normalizeDate(req.query.date);
+    const filter: Record<string, unknown> = { userId: req.user!._id };
+    if (req.query['date']) {
+      const d = normalizeDate(req.query['date'] as string);
       const nextDay = new Date(d);
       nextDay.setUTCDate(nextDay.getUTCDate() + 1);
-      filter.date = { $gte: d, $lt: nextDay };
-    } else if (req.query.from && req.query.to) {
-      filter.date = { $gte: normalizeDate(req.query.from), $lte: normalizeDate(req.query.to) };
+      filter['date'] = { $gte: d, $lt: nextDay };
+    } else if (req.query['from'] && req.query['to']) {
+      filter['date'] = {
+        $gte: normalizeDate(req.query['from'] as string),
+        $lte: normalizeDate(req.query['to'] as string),
+      };
     }
-    const completions = await Completion.find(filter).populate('habitId', 'name icon color frequency').sort({ completedAt: -1 });
+    const completions = await Completion.find(filter)
+      .populate('habitId', 'name icon color frequency')
+      .sort({ completedAt: -1 });
     res.json(completions);
   } catch (err) {
     next(err);
   }
 }
 
-async function createCompletion(req, res, next) {
+export async function createCompletion(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const { habitId, date, value, note } = req.body;
-    const habit = await Habit.findOne({ _id: habitId, userId: req.user._id, isActive: true });
+    const { habitId, date, value, note } = req.body as {
+      habitId: string;
+      date: string;
+      value?: number;
+      note?: string;
+    };
+    const habit = await Habit.findOne({ _id: habitId, userId: req.user!._id, isActive: true });
     if (!habit) {
-      return res.status(404).json({ error: { message: 'Habit not found', code: 'NOT_FOUND' } });
+      res.status(404).json({ error: { message: 'Habit not found', code: 'NOT_FOUND' } });
+      return;
     }
     const completion = await Completion.create({
       habitId,
-      userId: req.user._id,
+      userId: req.user!._id,
       date: normalizeDate(date),
-      value: value || 1,
-      note: note || '',
+      value: value ?? 1,
+      note: note ?? '',
     });
     // Notification triggers — run before response so tests can observe them;
     // errors are swallowed so they never affect the response.
     try {
-      await fireCompletionNotifications(req.user._id, completion);
-    } catch (_) {}
+      await fireCompletionNotifications(req.user!._id, completion);
+    } catch {
+      // swallow
+    }
 
     res.status(201).json(completion);
   } catch (err) {
-    if (err.code === 11000) {
-      return res.status(409).json({ error: { message: 'Already completed for this date', code: 'DUPLICATE' } });
+    const mongoErr = err as { code?: number };
+    if (mongoErr.code === 11000) {
+      res.status(409).json({ error: { message: 'Already completed for this date', code: 'DUPLICATE' } });
+      return;
     }
     next(err);
   }
 }
 
-async function fireCompletionNotifications(userId, completion) {
+async function fireCompletionNotifications(
+  userId: Types.ObjectId,
+  completion: CompletionDocument,
+): Promise<void> {
   const totalCompletions = await Completion.countDocuments({ userId });
 
   // 1. First completion ever
@@ -70,7 +90,7 @@ async function fireCompletionNotifications(userId, completion) {
     cutoff.setUTCDate(cutoff.getUTCDate() - 365);
     cutoff.setUTCHours(0, 0, 0, 0);
     const allCompletions = await Completion.find({ userId, date: { $gte: cutoff } }).sort({ date: -1 });
-    const streak = calculateStreak(allCompletions, dailyHabits.length);
+    const streak = calculateStreak(allCompletions as CompletionDocument[], dailyHabits.length);
 
     if (STREAK_MILESTONES.has(streak)) {
       const title = `🔥 ${streak}-day streak`;
@@ -78,13 +98,18 @@ async function fireCompletionNotifications(userId, completion) {
       sevenDaysAgo.setUTCDate(sevenDaysAgo.getUTCDate() - 7);
       const existing = await Notification.findOne({ userId, title, createdAt: { $gte: sevenDaysAgo } });
       if (!existing) {
-        await createNotification(userId, 'streak', title, `You've completed all your habits for ${streak} days in a row.`);
+        await createNotification(
+          userId,
+          'streak',
+          title,
+          `You've completed all your habits for ${streak} days in a row.`,
+        );
       }
     }
   }
 
   // 3. Perfect week — fires on first completion of a new week if last week was 100%
-  const getMondayOf = (d) => {
+  const getMondayOf = (d: Date): Date => {
     const day = d.getUTCDay();
     const diff = day === 0 ? 6 : day - 1;
     const monday = new Date(d);
@@ -128,24 +153,28 @@ async function fireCompletionNotifications(userId, completion) {
         sevenDaysAgo.setUTCDate(sevenDaysAgo.getUTCDate() - 7);
         const existing = await Notification.findOne({ userId, title, createdAt: { $gte: sevenDaysAgo } });
         if (!existing) {
-          await createNotification(userId, 'achievement', 'Perfect week', "You hit every target last week. That's rare — keep it going.");
+          await createNotification(
+            userId,
+            'achievement',
+            'Perfect week',
+            "You hit every target last week. That's rare — keep it going.",
+          );
         }
       }
     }
   }
 }
 
-async function deleteCompletion(req, res, next) {
+export async function deleteCompletion(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const completion = await Completion.findOne({ _id: req.params.id, userId: req.user._id });
+    const completion = await Completion.findOne({ _id: req.params['id'], userId: req.user!._id });
     if (!completion) {
-      return res.status(404).json({ error: { message: 'Completion not found', code: 'NOT_FOUND' } });
+      res.status(404).json({ error: { message: 'Completion not found', code: 'NOT_FOUND' } });
+      return;
     }
-    await Completion.deleteOne({ _id: req.params.id });
+    await Completion.deleteOne({ _id: req.params['id'] });
     res.status(204).send();
   } catch (err) {
     next(err);
   }
 }
-
-module.exports = { getCompletions, createCompletion, deleteCompletion };

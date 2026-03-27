@@ -1,9 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "rootDir": "."
+    "module": "Node16",
+    "moduleResolution": "node16",
+    "rootDir": ".",
+    "types": ["node", "jest"]
   },
   "include": ["src", "__tests__"]
 }

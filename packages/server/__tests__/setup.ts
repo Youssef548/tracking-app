@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
-let mongoServer;
+let mongoServer: MongoMemoryServer;
 
 jest.setTimeout(60_000);
 
