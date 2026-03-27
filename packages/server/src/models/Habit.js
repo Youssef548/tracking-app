@@ -15,4 +15,6 @@ const habitSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: true },
 }, { timestamps: true });
 
+habitSchema.index({ userId: 1, isActive: 1 });
+
 module.exports = mongoose.model('Habit', habitSchema);

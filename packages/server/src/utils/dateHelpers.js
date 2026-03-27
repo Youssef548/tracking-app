@@ -7,8 +7,9 @@ function normalizeDate(dateInput) {
 function getWeekRange() {
   const now = new Date();
   const dayOfWeek = now.getUTCDay();
+  const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Monday-start
   const start = new Date(now);
-  start.setUTCDate(now.getUTCDate() - dayOfWeek);
+  start.setUTCDate(now.getUTCDate() - diff);
   start.setUTCHours(0, 0, 0, 0);
   const end = new Date(start);
   end.setUTCDate(start.getUTCDate() + 7);
