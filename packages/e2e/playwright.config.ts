@@ -1,14 +1,14 @@
-const { defineConfig } = require('@playwright/test');
-const path = require('path');
+import { defineConfig } from '@playwright/test';
+import path from 'path';
 
-const serverDir = path.resolve(__dirname, '../server');
+const e2eDir = path.resolve(__dirname, '.');
 const clientDir = path.resolve(__dirname, '../client');
 
-module.exports = defineConfig({
+export default defineConfig({
   testDir: './tests',
   fullyParallel: false,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  forbidOnly: !!process.env['CI'],
+  retries: process.env['CI'] ? 2 : 0,
   workers: 1,
   reporter: 'list',
   use: {
@@ -18,9 +18,9 @@ module.exports = defineConfig({
   },
   webServer: [
     {
-      command: `node "${path.resolve(__dirname, 'start-server.js')}"`,
+      command: `node "${path.resolve(e2eDir, 'start-server.js')}"`,
       port: 5000,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: !process.env['CI'],
       timeout: 30000,
     },
     {

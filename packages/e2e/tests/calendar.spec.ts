@@ -1,10 +1,10 @@
-const { test, expect } = require('@playwright/test');
-const { registerAndLogin } = require('./helpers');
+import { test, expect } from '@playwright/test';
+import { registerAndLogin } from './helpers';
 
 test.describe('Calendar page', () => {
   test.beforeEach(async ({ page }) => {
     await registerAndLogin(page);
-    await page.getByRole('link', { name: 'Calendar' }).click();
+    await page.getByRole('link', { name: 'Calendar' }).first().click();
     await expect(page).toHaveURL('/calendar');
   });
 
@@ -40,7 +40,7 @@ test.describe('Calendar page', () => {
 
   test('shows day detail panel', async ({ page }) => {
     // The day detail panel should be visible for today by default
-    const todayStr = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const _todayStr = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
     // Just check the panel area exists — exact format may vary
     await expect(page.locator('aside')).toBeVisible();
   });

@@ -1,6 +1,6 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
-const unique = () => `user_${Date.now()}@test.com`;
+const unique = (): string => `user_${Date.now()}@test.com`;
 
 test.describe('Auth flows', () => {
   test('register a new account', async ({ page }) => {

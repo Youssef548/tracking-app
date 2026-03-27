@@ -1,12 +1,12 @@
-const { expect } = require('@playwright/test');
+import { expect, type Page } from '@playwright/test';
 
-const unique = () => `user_${Date.now()}@test.com`;
+const unique = (): string => `user_${Date.now()}@test.com`;
 
 /**
  * Register a new user and end up on the dashboard.
  * Returns the email used.
  */
-async function registerAndLogin(page) {
+async function registerAndLogin(page: Page): Promise<string> {
   const email = unique();
   // Navigate to app origin first so localStorage is accessible, then clear for test isolation
   await page.goto('/register');
@@ -20,4 +20,4 @@ async function registerAndLogin(page) {
   return email;
 }
 
-module.exports = { registerAndLogin, unique };
+export { registerAndLogin, unique };
