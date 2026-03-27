@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { motion } from 'framer-motion';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -22,7 +23,12 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface px-4">
-      <div className="w-full max-w-md bg-surface-container-lowest p-8 rounded-4xl shadow-lg">
+      <motion.div
+        className="w-full max-w-md bg-surface-container-lowest p-8 rounded-4xl shadow-lg"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+      >
         <h1 className="font-headline text-3xl font-extrabold text-on-surface mb-2">Welcome back</h1>
         <p className="text-on-surface-variant mb-8">Sign in to The Mindful Flow</p>
         {error && (
@@ -46,7 +52,7 @@ export default function Login() {
         <p className="text-center text-on-surface-variant text-sm mt-6">
           Don't have an account? <Link to="/register" className="text-primary font-semibold">Sign up</Link>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 }

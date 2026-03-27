@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { motion } from 'framer-motion';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -23,7 +24,12 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface px-4">
-      <div className="w-full max-w-md bg-surface-container-lowest p-8 rounded-4xl shadow-lg">
+      <motion.div
+        className="w-full max-w-md bg-surface-container-lowest p-8 rounded-4xl shadow-lg"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+      >
         <h1 className="font-headline text-3xl font-extrabold text-on-surface mb-2">Create account</h1>
         <p className="text-on-surface-variant mb-8">Start your mindful journey</p>
         {error && (
@@ -52,7 +58,7 @@ export default function Register() {
         <p className="text-center text-on-surface-variant text-sm mt-6">
           Already have an account? <Link to="/login" className="text-primary font-semibold">Sign in</Link>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 }
