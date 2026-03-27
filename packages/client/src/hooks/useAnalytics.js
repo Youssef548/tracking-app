@@ -23,3 +23,19 @@ export function useHabitAnalytics(habitId) {
     enabled: !!habitId,
   });
 }
+
+export function useLast30DaysAnalytics() {
+  const to = new Date();
+  to.setUTCHours(0, 0, 0, 0);
+  const from = new Date(to);
+  from.setUTCDate(to.getUTCDate() - 29);
+
+  const fromStr = from.toISOString().split('T')[0];
+  const toStr = to.toISOString().split('T')[0];
+
+  return useQuery({
+    queryKey: ['analytics', 'last30', fromStr, toStr],
+    queryFn: () =>
+      api.get('/analytics/monthly', { params: { from: fromStr, to: toStr } }).then((r) => r.data),
+  });
+}
