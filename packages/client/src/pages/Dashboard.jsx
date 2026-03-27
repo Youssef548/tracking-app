@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useHabits } from '../hooks/useHabits';
 import { useCompletionsByDate, useCreateCompletion, useDeleteCompletion } from '../hooks/useCompletions';
@@ -6,6 +7,7 @@ import HabitCard from '../components/HabitCard';
 import ProgressRing from '../components/ProgressRing';
 import StatCard from '../components/StatCard';
 import AnimatedList, { AnimatedItem } from '../components/AnimatedList';
+import DurationInput from '../components/DurationInput';
 
 function getToday() {
   return new Date().toISOString().split('T')[0];
@@ -26,18 +28,33 @@ export default function Dashboard() {
   const { data: weekly } = useWeeklyAnalytics();
   const createCompletion = useCreateCompletion();
   const deleteCompletion = useDeleteCompletion();
+  const [durationHabit, setDurationHabit] = useState(null);
 
-  const dailyHabits = habits.filter((h) => h.frequency === 'daily');
+  const allHabits = habits;
   const completedIds = new Set(completions.map((c) => c.habitId?._id || c.habitId));
-  const completedCount = dailyHabits.filter((h) => completedIds.has(h._id)).length;
+  const completedCount = allHabits.filter((h) => completedIds.has(h._id)).length;
 
   function handleToggle(habit) {
+    if (habit.trackingType === 'duration') {
+      const existing = completions.find((c) => (c.habitId?._id || c.habitId) === habit._id);
+      if (existing) {
+        deleteCompletion.mutate(existing._id);
+      } else {
+        setDurationHabit(habit);
+      }
+      return;
+    }
     const existing = completions.find((c) => (c.habitId?._id || c.habitId) === habit._id);
     if (existing) {
       deleteCompletion.mutate(existing._id);
     } else {
       createCompletion.mutate({ habitId: habit._id, date: today });
     }
+  }
+
+  function handleDurationSubmit(hours) {
+    createCompletion.mutate({ habitId: durationHabit._id, date: today, value: hours });
+    setDurationHabit(null);
   }
 
   const dayName = new Date().toLocaleDateString('en-US', { weekday: 'long' });
@@ -55,21 +72,25 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div className="lg:col-span-8">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="font-headline text-xl font-bold">Daily Rituals</h2>
+            <h2 className="font-headline text-xl font-bold">Today's Habits</h2>
             <span className="text-sm font-semibold text-primary bg-primary/5 px-3 py-1 rounded-full">
-              {completedCount} of {dailyHabits.length} completed
+              {completedCount} of {allHabits.length} completed
             </span>
           </div>
           <AnimatedList className="space-y-6">
-            {dailyHabits.map((habit) => (
+            {allHabits.map((habit) => (
               <AnimatedItem key={habit._id}>
-                <HabitCard habit={habit} completed={completedIds.has(habit._id)}
-                  onToggle={() => handleToggle(habit)} />
+                <HabitCard
+                  habit={habit}
+                  completed={completedIds.has(habit._id)}
+                  onToggle={() => handleToggle(habit)}
+                  weeklyHours={habit.trackingType === 'duration' ? completions.filter(c => (c.habitId?._id || c.habitId) === habit._id).reduce((sum, c) => sum + c.value, 0) : null}
+                />
               </AnimatedItem>
             ))}
           </AnimatedList>
-          {dailyHabits.length === 0 && (
-            <p className="text-on-surface-variant text-center py-12">No daily habits yet. Create one to get started!</p>
+          {allHabits.length === 0 && (
+            <p className="text-on-surface-variant text-center py-12">No habits yet. Create one to get started!</p>
           )}
         </div>
 
@@ -89,6 +110,13 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      <DurationInput
+        open={!!durationHabit}
+        onClose={() => setDurationHabit(null)}
+        onSubmit={handleDurationSubmit}
+        habitName={durationHabit?.name || ''}
+      />
     </>
   );
 }
