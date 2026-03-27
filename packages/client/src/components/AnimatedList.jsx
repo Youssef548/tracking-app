@@ -1,20 +1,15 @@
-import { motion } from 'framer-motion';
-
-const container = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.05,
-    },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
-};
+import { motion, useReducedMotion } from 'framer-motion';
 
 export default function AnimatedList({ children, className = '' }) {
+  const shouldReduce = useReducedMotion();
+
+  const container = {
+    hidden: {},
+    show: {
+      transition: shouldReduce ? {} : { staggerChildren: 0.05 },
+    },
+  };
+
   return (
     <motion.div
       variants={container}
@@ -28,6 +23,12 @@ export default function AnimatedList({ children, className = '' }) {
 }
 
 export function AnimatedItem({ children, className = '' }) {
+  const shouldReduce = useReducedMotion();
+
+  const item = shouldReduce
+    ? { hidden: {}, show: {} }
+    : { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } } };
+
   return (
     <motion.div variants={item} className={className}>
       {children}

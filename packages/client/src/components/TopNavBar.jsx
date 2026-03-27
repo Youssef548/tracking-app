@@ -39,6 +39,7 @@ export default function TopNavBar() {
           <NotificationDropdown />
           <NavLink
             to="/settings"
+            aria-label="Settings"
             className={({ isActive }) =>
               `p-2 rounded-full transition-colors ${
                 isActive
@@ -46,9 +47,8 @@ export default function TopNavBar() {
                   : 'text-on-surface-variant hover:bg-surface-container-high'
               }`
             }
-            title="Settings"
           >
-            <span className="material-symbols-outlined">settings</span>
+            <span className="material-symbols-outlined" aria-hidden="true">settings</span>
           </NavLink>
           <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold font-headline">
             {user?.name?.charAt(0).toUpperCase()}

@@ -20,10 +20,16 @@ export default function NotificationDropdown() {
 
   return (
     <div className="relative" ref={ref}>
-      <button onClick={() => setOpen(!open)} className="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors relative">
-        <span className="material-symbols-outlined">notifications</span>
+      <button
+        onClick={() => setOpen(!open)}
+        aria-label={unreadCount > 0 ? `Notifications, ${unreadCount} unread` : 'Notifications'}
+        aria-expanded={open}
+        aria-haspopup="true"
+        className="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors relative"
+      >
+        <span className="material-symbols-outlined" aria-hidden="true">notifications</span>
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-tertiary text-on-tertiary text-[10px] font-bold rounded-full flex items-center justify-center">
+          <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-tertiary text-on-tertiary text-[10px] font-bold rounded-full flex items-center justify-center" aria-hidden="true">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -36,7 +42,7 @@ export default function NotificationDropdown() {
               <button onClick={() => markAllRead.mutate()} className="text-xs text-primary font-semibold">Mark all read</button>
             )}
           </div>
-          <div className="max-h-80 overflow-y-auto">
+          <div className="max-h-80 overflow-y-auto" aria-live="polite" aria-label="Notification list">
             {notifications.length === 0 ? (
               <p className="p-4 text-center text-on-surface-variant text-sm">No notifications</p>
             ) : (

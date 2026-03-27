@@ -41,18 +41,18 @@ export default function Register() {
         )}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-bold text-on-surface-variant mb-1">Name</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required
+            <label htmlFor="reg-name" className="block text-sm font-bold text-on-surface-variant mb-1">Name</label>
+            <input id="reg-name" type="text" value={name} onChange={(e) => setName(e.target.value)} required
               className="w-full px-5 py-4 rounded-2xl bg-surface-container border-none focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-on-surface-variant/40 font-medium" placeholder="Your name" />
           </div>
           <div>
-            <label className="block text-sm font-bold text-on-surface-variant mb-1">Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
+            <label htmlFor="reg-email" className="block text-sm font-bold text-on-surface-variant mb-1">Email</label>
+            <input id="reg-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
               className="w-full px-5 py-4 rounded-2xl bg-surface-container border-none focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-on-surface-variant/40 font-medium" placeholder="you@example.com" />
           </div>
           <div>
-            <label className="block text-sm font-bold text-on-surface-variant mb-1">Password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6}
+            <label htmlFor="reg-password" className="block text-sm font-bold text-on-surface-variant mb-1">Password</label>
+            <input id="reg-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6}
               className="w-full px-5 py-4 rounded-2xl bg-surface-container border-none focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-on-surface-variant/40 font-medium" placeholder="••••••" />
           </div>
           <button type="submit" disabled={loading} className="w-full py-4 bg-primary text-on-primary font-bold rounded-2xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed">
