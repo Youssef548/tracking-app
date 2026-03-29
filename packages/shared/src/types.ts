@@ -103,7 +103,7 @@ export interface WeeklyPlanHabitOverride {
 export interface WeeklyPlan {
   _id: string;
   userId: string;
-  weekKey: string; // "2026-03-28" — Saturday date that starts the week
+  weekKey: string; // ISO date of the Saturday that opens the week, e.g. "2026-03-28"
   habitTargetOverrides: WeeklyPlanHabitOverride[];
   weekNote: string;
   createdAt: string;
@@ -137,7 +137,7 @@ export interface TotalsEntry {
 export interface WeeklyReview {
   _id: string;
   userId: string;
-  weekKey: string; // "2026-03-28"
+  weekKey: string; // ISO date of the Saturday that opens the week, e.g. "2026-03-28"
   wentWell: string;
   toImprove: string;
   changesNextWeek: string;
