@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export interface IGoalItem {
+  _id?: Types.ObjectId;
   text: string;
   completed: boolean;
   order: number;
