@@ -775,3 +775,65 @@ describe('MonthlyGoalItem endpoints', () => {
     expect(res.status).toBe(401);
   });
 });
+
+// ─── WeeklyReview ────────────────────────────────────────────────────
+
+describe('WeeklyReview endpoints', () => {
+  let wrToken: string;
+
+  beforeAll(async () => {
+    const result = await registerAndGetToken({
+      name: 'WR User',
+      email: 'wr@example.com',
+      password: 'password123',
+    });
+    wrToken = result.token;
+  });
+
+  it('GET /weekly-reviews/:weekKey — 404 when no review exists', async () => {
+    const res = await request(app)
+      .get('/api/weekly-reviews/2026-03-28')
+      .set('Authorization', `Bearer ${wrToken}`);
+    expect(res.status).toBe(404);
+    expect(res.body.error.code).toBe('NOT_FOUND');
+  });
+
+  it('PUT /weekly-reviews/:weekKey — creates a review', async () => {
+    const res = await request(app)
+      .put('/api/weekly-reviews/2026-03-28')
+      .set('Authorization', `Bearer ${wrToken}`)
+      .send({
+        wentWell: 'Stayed consistent with fundamentals',
+        toImprove: 'Need more tech time',
+        changesNextWeek: 'Block 1hr for tech daily',
+        totals: [{ habitId: '507f1f77bcf86cd799439011', habitName: 'Gym', done: 2, target: 3 }],
+      });
+    expect(res.status).toBe(200);
+    expect(res.body.weekKey).toBe('2026-03-28');
+    expect(res.body.wentWell).toBe('Stayed consistent with fundamentals');
+    expect(res.body.totals).toHaveLength(1);
+    expect(res.body.totals[0].done).toBe(2);
+  });
+
+  it('GET /weekly-reviews/:weekKey — returns existing review', async () => {
+    const res = await request(app)
+      .get('/api/weekly-reviews/2026-03-28')
+      .set('Authorization', `Bearer ${wrToken}`);
+    expect(res.status).toBe(200);
+    expect(res.body.wentWell).toBe('Stayed consistent with fundamentals');
+  });
+
+  it('PUT /weekly-reviews/:weekKey — upserts (updates existing)', async () => {
+    const res = await request(app)
+      .put('/api/weekly-reviews/2026-03-28')
+      .set('Authorization', `Bearer ${wrToken}`)
+      .send({ wentWell: 'Even better', toImprove: '', changesNextWeek: '', totals: [] });
+    expect(res.status).toBe(200);
+    expect(res.body.wentWell).toBe('Even better');
+  });
+
+  it('GET /weekly-reviews/:weekKey — 401 without token', async () => {
+    const res = await request(app).get('/api/weekly-reviews/2026-03-28');
+    expect(res.status).toBe(401);
+  });
+});
