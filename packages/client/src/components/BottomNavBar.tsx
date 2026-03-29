@@ -7,11 +7,11 @@ interface TabItem {
 }
 
 const tabs: TabItem[] = [
-  { to: '/',          icon: 'home',           label: 'Home'      },
-  { to: '/habits',    icon: 'checklist',      label: 'Habits'    },
-  { to: '/weekly',    icon: 'view_week',      label: 'Weekly'    },
-  { to: '/calendar',  icon: 'calendar_month', label: 'Calendar'  },
-  { to: '/analytics', icon: 'analytics',      label: 'Analytics' },
+  { to: '/',          icon: 'calendar_view_week', label: 'Week'      },
+  { to: '/month',     icon: 'checklist',          label: 'Month'     },
+  { to: '/review',    icon: 'rate_review',        label: 'Review'    },
+  { to: '/analytics', icon: 'analytics',          label: 'Analytics' },
+  { to: '/settings',  icon: 'settings',           label: 'Settings'  },
 ];
 
 export default function BottomNavBar() {

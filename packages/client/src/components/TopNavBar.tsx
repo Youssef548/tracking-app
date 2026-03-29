@@ -8,11 +8,10 @@ interface NavLinkItem {
 }
 
 const links: NavLinkItem[] = [
-  { to: '/',          label: 'Home'      },
-  { to: '/calendar',  label: 'Calendar'  },
-  { to: '/weekly',    label: 'Weekly'    },
+  { to: '/',          label: 'Week'      },
+  { to: '/month',     label: 'Month'     },
+  { to: '/review',    label: 'Review'    },
   { to: '/analytics', label: 'Analytics' },
-  { to: '/habits',    label: 'Habits'    },
 ];
 
 export default function TopNavBar() {
