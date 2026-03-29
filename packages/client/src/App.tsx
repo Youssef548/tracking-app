@@ -5,41 +5,41 @@ import ProtectedRoute from './components/ProtectedRoute';
 import TopNavBar from './components/TopNavBar';
 import BottomNavBar from './components/BottomNavBar';
 import PageTransition from './components/PageTransition';
-import DashboardSkeleton from './components/skeletons/DashboardSkeleton';
-import CalendarSkeleton from './components/skeletons/CalendarSkeleton';
+import WeekPageSkeleton from './components/skeletons/WeekPageSkeleton';
+import MonthPageSkeleton from './components/skeletons/MonthPageSkeleton';
+import ReviewPageSkeleton from './components/skeletons/ReviewPageSkeleton';
 import AnalyticsSkeleton from './components/skeletons/AnalyticsSkeleton';
-import HabitsSkeleton from './components/skeletons/HabitsSkeleton';
-import AuthSkeleton from './components/skeletons/AuthSkeleton';
-import WeeklySkeleton from './components/skeletons/WeeklySkeleton';
 import SettingsSkeleton from './components/skeletons/SettingsSkeleton';
+import AuthSkeleton from './components/skeletons/AuthSkeleton';
 
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Calendar = lazy(() => import('./pages/Calendar'));
+const WeekPage = lazy(() => import('./pages/WeekPage'));
+const MonthPage = lazy(() => import('./pages/MonthPage'));
+const ReviewPage = lazy(() => import('./pages/ReviewPage'));
 const Analytics = lazy(() => import('./pages/Analytics'));
-const Weekly = lazy(() => import('./pages/Weekly'));
-const Habits = lazy(() => import('./pages/Habits'));
+const Settings = lazy(() => import('./pages/Settings'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
-const Settings = lazy(() => import('./pages/Settings'));
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-surface">
       <TopNavBar />
-      <main className="max-w-7xl mx-auto px-6 pt-8 pb-32 md:pb-12">
-        {children}
-      </main>
+      <main className="max-w-7xl mx-auto px-6 pt-8 pb-32 md:pb-12">{children}</main>
       <BottomNavBar />
     </div>
   );
 }
 
-function LazyPage({ skeleton, children }: { skeleton: React.ReactNode; children: React.ReactNode }) {
+function LazyPage({
+  skeleton,
+  children,
+}: {
+  skeleton: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <Suspense fallback={skeleton}>
-      <PageTransition>
-        {children}
-      </PageTransition>
+      <PageTransition>{children}</PageTransition>
     </Suspense>
   );
 }
@@ -50,42 +50,82 @@ export default function App() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path="/login" element={
-          <LazyPage skeleton={<AuthSkeleton />}><Login /></LazyPage>
-        } />
-        <Route path="/register" element={
-          <LazyPage skeleton={<AuthSkeleton />}><Register /></LazyPage>
-        } />
-        <Route path="/" element={
-          <ProtectedRoute><AppLayout>
-            <LazyPage skeleton={<DashboardSkeleton />}><Dashboard /></LazyPage>
-          </AppLayout></ProtectedRoute>
-        } />
-        <Route path="/calendar" element={
-          <ProtectedRoute><AppLayout>
-            <LazyPage skeleton={<CalendarSkeleton />}><Calendar /></LazyPage>
-          </AppLayout></ProtectedRoute>
-        } />
-        <Route path="/weekly" element={
-          <ProtectedRoute><AppLayout>
-            <LazyPage skeleton={<WeeklySkeleton />}><Weekly /></LazyPage>
-          </AppLayout></ProtectedRoute>
-        } />
-        <Route path="/analytics" element={
-          <ProtectedRoute><AppLayout>
-            <LazyPage skeleton={<AnalyticsSkeleton />}><Analytics /></LazyPage>
-          </AppLayout></ProtectedRoute>
-        } />
-        <Route path="/habits" element={
-          <ProtectedRoute><AppLayout>
-            <LazyPage skeleton={<HabitsSkeleton />}><Habits /></LazyPage>
-          </AppLayout></ProtectedRoute>
-        } />
-        <Route path="/settings" element={
-          <ProtectedRoute><AppLayout>
-            <LazyPage skeleton={<SettingsSkeleton />}><Settings /></LazyPage>
-          </AppLayout></ProtectedRoute>
-        } />
+        <Route
+          path="/login"
+          element={
+            <LazyPage skeleton={<AuthSkeleton />}>
+              <Login />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <LazyPage skeleton={<AuthSkeleton />}>
+              <Register />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <LazyPage skeleton={<WeekPageSkeleton />}>
+                  <WeekPage />
+                </LazyPage>
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/month"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <LazyPage skeleton={<MonthPageSkeleton />}>
+                  <MonthPage />
+                </LazyPage>
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/review"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <LazyPage skeleton={<ReviewPageSkeleton />}>
+                  <ReviewPage />
+                </LazyPage>
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <LazyPage skeleton={<AnalyticsSkeleton />}>
+                  <Analytics />
+                </LazyPage>
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <LazyPage skeleton={<SettingsSkeleton />}>
+                  <Settings />
+                </LazyPage>
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AnimatePresence>
