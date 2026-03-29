@@ -94,3 +94,54 @@ export interface CreateCategoryInput {
   name: string;
   color: string;
 }
+
+export interface WeeklyPlanHabitOverride {
+  habitId: string;
+  targetDays: number;
+}
+
+export interface WeeklyPlan {
+  _id: string;
+  userId: string;
+  weekKey: string; // "2026-03-28" — Saturday date that starts the week
+  habitTargetOverrides: WeeklyPlanHabitOverride[];
+  weekNote: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GoalItem {
+  _id: string;
+  text: string;
+  completed: boolean;
+  order: number;
+}
+
+export interface MonthlyGoalItem {
+  _id: string;
+  userId: string;
+  habitId: string;
+  monthKey: string; // "2026-03"
+  items: GoalItem[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TotalsEntry {
+  habitId: string;
+  habitName: string;
+  done: number;
+  target: number;
+}
+
+export interface WeeklyReview {
+  _id: string;
+  userId: string;
+  weekKey: string; // "2026-03-28"
+  wentWell: string;
+  toImprove: string;
+  changesNextWeek: string;
+  totals: TotalsEntry[];
+  createdAt: string;
+  updatedAt: string;
+}
