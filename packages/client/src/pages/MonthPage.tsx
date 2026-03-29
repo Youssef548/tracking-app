@@ -36,7 +36,9 @@ function HabitGoalCard({ habit, goalData, monthKey }: HabitCardProps) {
 
   function toggleItem(item: GoalItem) {
     const updated = items.map((it) =>
-      it._id === item._id ? { text: it.text, completed: !it.completed, order: it.order } : it,
+      it._id === item._id
+        ? { text: it.text, completed: !it.completed, order: it.order }
+        : { text: it.text, completed: it.completed, order: it.order },
     );
     saveItems(updated);
   }
