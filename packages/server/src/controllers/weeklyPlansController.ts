@@ -22,9 +22,12 @@ export async function upsertWeeklyPlan(req: Request, res: Response, next: NextFu
       habitTargetOverrides?: { habitId: string; targetDays: number }[];
       weekNote?: string;
     };
+    const update: Record<string, unknown> = {};
+    if (habitTargetOverrides !== undefined) update['habitTargetOverrides'] = habitTargetOverrides;
+    if (weekNote !== undefined) update['weekNote'] = weekNote;
     const plan = await WeeklyPlan.findOneAndUpdate(
       { userId: req.user!._id, weekKey },
-      { $set: { habitTargetOverrides: habitTargetOverrides ?? [], weekNote: weekNote ?? '' } },
+      { $set: update },
       { upsert: true, new: true },
     );
     res.json(plan);
