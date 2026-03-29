@@ -654,3 +654,59 @@ describe('Health check', () => {
     expect(res.body.status).toBe('ok');
   });
 });
+
+// ─── WeeklyPlan ─────────────────────────────────────────────────────
+
+describe('WeeklyPlan endpoints', () => {
+  let wpToken: string;
+
+  beforeAll(async () => {
+    const result = await registerAndGetToken({
+      name: 'WP User',
+      email: 'wp@example.com',
+      password: 'password123',
+    });
+    wpToken = result.token;
+  });
+
+  it('GET /weekly-plans/:weekKey — 404 when no plan exists', async () => {
+    const res = await request(app)
+      .get('/api/weekly-plans/2026-03-28')
+      .set('Authorization', `Bearer ${wpToken}`);
+    expect(res.status).toBe(404);
+    expect(res.body.error.code).toBe('NOT_FOUND');
+  });
+
+  it('PUT /weekly-plans/:weekKey — creates a plan', async () => {
+    const res = await request(app)
+      .put('/api/weekly-plans/2026-03-28')
+      .set('Authorization', `Bearer ${wpToken}`)
+      .send({ habitTargetOverrides: [], weekNote: 'Hip flexor week' });
+    expect(res.status).toBe(200);
+    expect(res.body.weekKey).toBe('2026-03-28');
+    expect(res.body.weekNote).toBe('Hip flexor week');
+    expect(res.body.habitTargetOverrides).toEqual([]);
+  });
+
+  it('GET /weekly-plans/:weekKey — returns existing plan', async () => {
+    const res = await request(app)
+      .get('/api/weekly-plans/2026-03-28')
+      .set('Authorization', `Bearer ${wpToken}`);
+    expect(res.status).toBe(200);
+    expect(res.body.weekNote).toBe('Hip flexor week');
+  });
+
+  it('PUT /weekly-plans/:weekKey — updates plan (upsert)', async () => {
+    const res = await request(app)
+      .put('/api/weekly-plans/2026-03-28')
+      .set('Authorization', `Bearer ${wpToken}`)
+      .send({ habitTargetOverrides: [], weekNote: 'Updated note' });
+    expect(res.status).toBe(200);
+    expect(res.body.weekNote).toBe('Updated note');
+  });
+
+  it('GET /weekly-plans/:weekKey — 401 without token', async () => {
+    const res = await request(app).get('/api/weekly-plans/2026-03-28');
+    expect(res.status).toBe(401);
+  });
+});

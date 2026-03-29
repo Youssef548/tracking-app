@@ -11,6 +11,7 @@ import completionsRoutes from './routes/completions';
 import analyticsRoutes from './routes/analytics';
 import notificationsRoutes from './routes/notifications';
 import categoriesRoutes from './routes/categories';
+import weeklyPlansRoutes from './routes/weeklyPlans';
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use('/api/completions', completionsRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use('/api/categories', categoriesRoutes);
+app.use('/api/weekly-plans', weeklyPlansRoutes);
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
