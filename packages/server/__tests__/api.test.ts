@@ -710,3 +710,68 @@ describe('WeeklyPlan endpoints', () => {
     expect(res.status).toBe(401);
   });
 });
+
+// ─── MonthlyGoalItem ─────────────────────────────────────────────────
+
+describe('MonthlyGoalItem endpoints', () => {
+  let mgToken: string;
+
+  beforeAll(async () => {
+    const result = await registerAndGetToken({
+      name: 'MG User',
+      email: 'mg@example.com',
+      password: 'password123',
+    });
+    mgToken = result.token;
+  });
+
+  const fakeHabitId = '507f1f77bcf86cd799439011';
+
+  it('GET /monthly-goals/:monthKey — returns empty array when none exist', async () => {
+    const res = await request(app)
+      .get('/api/monthly-goals/2026-03')
+      .set('Authorization', `Bearer ${mgToken}`);
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([]);
+  });
+
+  it('PUT /monthly-goals/:monthKey/:habitId — creates goal items', async () => {
+    const items = [
+      { text: 'Push-ups 3x20', completed: false, order: 0 },
+      { text: 'Bulgarian split squat 3x10', completed: false, order: 1 },
+    ];
+    const res = await request(app)
+      .put(`/api/monthly-goals/2026-03/${fakeHabitId}`)
+      .set('Authorization', `Bearer ${mgToken}`)
+      .send({ items });
+    expect(res.status).toBe(200);
+    expect(res.body.items).toHaveLength(2);
+    expect(res.body.items[0].text).toBe('Push-ups 3x20');
+    expect(res.body.monthKey).toBe('2026-03');
+  });
+
+  it('GET /monthly-goals/:monthKey — returns created goals', async () => {
+    const res = await request(app)
+      .get('/api/monthly-goals/2026-03')
+      .set('Authorization', `Bearer ${mgToken}`);
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(1);
+    expect(res.body[0].items).toHaveLength(2);
+  });
+
+  it('PUT /monthly-goals/:monthKey/:habitId — upserts (replaces items)', async () => {
+    const items = [{ text: 'Push-ups 3x20', completed: true, order: 0 }];
+    const res = await request(app)
+      .put(`/api/monthly-goals/2026-03/${fakeHabitId}`)
+      .set('Authorization', `Bearer ${mgToken}`)
+      .send({ items });
+    expect(res.status).toBe(200);
+    expect(res.body.items).toHaveLength(1);
+    expect(res.body.items[0].completed).toBe(true);
+  });
+
+  it('GET /monthly-goals/:monthKey — 401 without token', async () => {
+    const res = await request(app).get('/api/monthly-goals/2026-03');
+    expect(res.status).toBe(401);
+  });
+});

@@ -12,6 +12,7 @@ import analyticsRoutes from './routes/analytics';
 import notificationsRoutes from './routes/notifications';
 import categoriesRoutes from './routes/categories';
 import weeklyPlansRoutes from './routes/weeklyPlans';
+import monthlyGoalsRoutes from './routes/monthlyGoals';
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/weekly-plans', weeklyPlansRoutes);
+app.use('/api/monthly-goals', monthlyGoalsRoutes);
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
