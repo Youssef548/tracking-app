@@ -46,8 +46,10 @@ export default function WeekPage() {
     );
   }
 
+  const FRIDAY_INDEX = 6; // week layout: Sat=0, Sun=1, Mon=2, Tue=3, Wed=4, Thu=5, Fri=6
+
   function toggleCell(habitId: string, date: Date, dayIndex: number) {
-    const isFriday = dayIndex === 6;
+    const isFriday = dayIndex === FRIDAY_INDEX;
     const today = new Date();
     today.setHours(23, 59, 59, 999);
     const isFuture = date > today;
@@ -62,7 +64,12 @@ export default function WeekPage() {
   }
 
   function getDoneCount(habitId: string): number {
-    return completions.filter((c) => c.habitId._id === habitId).length;
+    return completions.filter(
+      (c) =>
+        c.habitId._id === habitId &&
+        c.date.slice(0, 10) >= from &&
+        c.date.slice(0, 10) <= to,
+    ).length;
   }
 
   const totalScheduled = activeHabits.reduce((sum, h) => sum + getTarget(h), 0);
@@ -128,13 +135,14 @@ export default function WeekPage() {
                 <th className="text-left py-2 pr-3 font-semibold text-on-surface-variant text-xs uppercase tracking-wide w-28">
                   Activity
                 </th>
-                {DAY_LABELS.map((label, i) => {
-                  const isToday = toDateString(weekDays[i]!) === toDateString(new Date());
+                {weekDays.map((day, i) => {
+                  const label = DAY_LABELS[i] ?? '';
+                  const isToday = toDateString(day) === toDateString(new Date());
                   return (
                     <th
                       key={i}
                       className={`text-center py-2 px-1 font-semibold text-xs uppercase tracking-wide w-9 ${
-                        i === 6
+                        i === FRIDAY_INDEX
                           ? 'text-on-surface-variant/40'
                           : isToday
                           ? 'text-primary'
@@ -163,7 +171,7 @@ export default function WeekPage() {
                       </span>
                     </td>
                     {weekDays.map((day, i) => {
-                      const isFriday = i === 6;
+                      const isFriday = i === FRIDAY_INDEX;
                       const today = new Date();
                       today.setHours(23, 59, 59, 999);
                       const isFuture = day > today;
@@ -186,7 +194,7 @@ export default function WeekPage() {
                                   ? 'border-2 border-primary/50 text-transparent hover:border-primary'
                                   : 'border border-outline-variant/50 text-transparent hover:border-primary/50'
                               }`}
-                              aria-label={`Toggle ${habit.name} on ${DAY_LABELS[i]!}`}
+                              aria-label={`Toggle ${habit.name} on ${DAY_LABELS[i] ?? ''}`}
                             >
                               {completion && (
                                 <span className="material-symbols-outlined text-sm">check</span>
