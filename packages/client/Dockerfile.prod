@@ -29,6 +29,9 @@ RUN mkdir -p /app/node_modules/@mindful-flow && \
     rm -rf /app/node_modules/@mindful-flow/shared && \
     ln -s /app/packages/shared /app/node_modules/@mindful-flow/shared
 
+# Build shared package so dist/ exists for Vite to resolve @mindful-flow/shared/*
+RUN cd packages/shared && node /app/node_modules/tsup/dist/cli-default.js
+
 # Cache-bust: changes when commit SHA changes, forces vite rebuild
 ARG CACHE_BUST
 RUN echo "build: ${CACHE_BUST}" && cd packages/client && node /app/node_modules/vite/bin/vite.js build
