@@ -34,9 +34,12 @@ RUN mkdir -p /app/node_modules/@mindful-flow && \
     rm -rf /app/node_modules/@mindful-flow/shared && \
     ln -s /app/packages/shared /app/node_modules/@mindful-flow/shared
 
+# Build shared package so dist/ exists for server imports
+RUN cd packages/shared && node /app/node_modules/tsup/dist/cli-default.js
+
 USER nodejs
 WORKDIR /app/packages/server
 
 EXPOSE 5000
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:5000/api/health || exit 1
-CMD ["node", "src/index.js"]
+CMD ["node_modules/.bin/tsx", "src/index.ts"]
